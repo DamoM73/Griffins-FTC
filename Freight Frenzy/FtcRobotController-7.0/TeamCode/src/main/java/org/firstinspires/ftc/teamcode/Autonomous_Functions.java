@@ -25,16 +25,16 @@ public class Autonomous_Functions extends LinearOpMode {
     private DcMotor motor_front_left;
     private DcMotor motor_back_left;
     //private DcMotorEx arm_motor;
-    
+
     // convert count per revolution to counts per cm 
-    static final double HD_COUNT_PER_REV = 28;
+    static final double HD_COUNTS_PER_REV = 28;
     static final double DRIVE_GEAR_REDUCTION = 40;
     static final double WHEEL_CIRCUMFERENCE_MM = 75 * Math.PI;
     static final double DRIVE_COUNTS_PER_MM = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM = DRIVE_COUNTS_PER_MM * 10;
-    
+
     private ElapsedTime
-    runtime = new ElapsedTime();
+            runtime = new ElapsedTime();
 
 
     public float motor1_power(float jY, float jX, float rX) {
@@ -53,124 +53,132 @@ public class Autonomous_Functions extends LinearOpMode {
         return ((jX + jY)/2 + rX /2);
     }
 
-    public static void motorFwdTargetPositions (float cmDistance) {
+    public void motorFwdTargetPositions (float cmDistance) {
         // set target positions when travelling forward (all +)
-        motor1Target = motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor2Target = motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor3Target = motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor4Target = motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor1Target = (int)motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor2Target = (int)motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+
+
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
         motor_front_left.setTargetPosition(motor2Target);
         motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
+        motor_back_left.setTargetPosition(motor4Target);
+        telemetry.addData("FR", motor_front_right.getTargetPosition());
+        telemetry.addData("FL", motor_front_left.getTargetPosition());
+        telemetry.addData("BR", motor_back_right.getTargetPosition());
+        telemetry.addData("BL", motor_back_left.getTargetPosition());
+        telemetry.update();
     }
 
-    public static void motorBwdTargetPositions (float cmDistance) {
+    public void motorBwdTargetPositions (float cmDistance) {
         // set target positions when travelling backward
-        motor1Target = -1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor2Target = -1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor3Target = -1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor4Target = -1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
 
         // set motors to drive to position
         motor_front_right.setTargetPosition(motor1Target);
         motor_front_left.setTargetPosition(motor2Target);
         motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
+        motor_back_left.setTargetPosition(motor4Target);
     }
 
-    public static void motorRtTargetPositions (float cmDistance) {
+    public void motorRtTargetPositions (float cmDistance) {
         // set target positions when driving right (fr -, bl -)
-        motor1Target = -1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor2Target = motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor3Target = motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor4Target = -1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor2Target = (int)motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
         motor_front_left.setTargetPosition(motor2Target);
         motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
+        motor_back_left.setTargetPosition(motor4Target);
     }
 
-    public static void motorLtTargetPositions (float cmDistance) {
+    public void motorLtTargetPositions (float cmDistance) {
         // set target positions when driving left (fl -, br -)
-        motor1Target = motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor2Target = -1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor3Target = -1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor4Target = motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor1Target = (int)motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition()) + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
         motor_front_left.setTargetPosition(motor2Target);
         motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
+        motor_back_left.setTargetPosition(motor4Target);
     }
+    /**
+     public static void motorFwdRtDiagTargetPositions (float cmDistance) {
+     // set target positions when driving diagonally right and forward (fr 0, bl 0)
+     motor1Target = motor_front_right.getCurrentPosition();
+     motor2Target = motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+     motor3Target = motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+     motor4Target = motor_back_left.getCurrentPosition();
 
-    public static void motorFwdRtDiagTargetPositions (float cmDistance) {
-        // set target positions when driving diagonally right and forward (fr 0, bl 0)
-        motor1Target = motor_front_right.getCurrentPosition();
-        motor2Target = motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor3Target = motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor4Target = motor_back_left.getCurrentPosition();
 
+     // set motors to drive to position.
+     motor_front_right.setTargetPosition(motor1Target);
+     motor_front_left.setTargetPosition(motor2Target);
+     motor_back_right.setTargetPosition(motor3Target);
+     motor_front_left.setTargetPosition(motor4Target);
+     }
 
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
-    }
+     public static void motorFwdLtDiagTargetPositions (float cmDistance) {
+     // set target positions when driving diagonally left forward (fl 0, br 0)
+     motor1Target = motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+     motor2Target = motor_front_left.getCurrentPosition();
+     motor3Target = motor_back_right.getCurrentPosition();
+     motor4Target = motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
 
-    public static void motorFwdLtDiagTargetPositions (float cmDistance) {
-        // set target positions when driving diagonally left forward (fl 0, br 0)
-        motor1Target = motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-        motor2Target = motor_front_left.getCurrentPosition();
-        motor3Target = motor_back_right.getCurrentPosition();
-        motor4Target = motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+     // set motors to drive to position.
+     motor_front_right.setTargetPosition(motor1Target);
+     motor_front_left.setTargetPosition(motor2Target);
+     motor_back_right.setTargetPosition(motor3Target);
+     motor_front_left.setTargetPosition(motor4Target);
+     }
 
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
-    }
+     public static void motorBwdRtDiagTargetPositions (float cmDistance) {
+     // set target positions when driving diagonally right backward (fr -1, bl -1, fl 0, br 0)
+     motor1Target = -1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+     motor2Target = motor_front_left.getCurrentPosition();
+     motor3Target = motor_back_right.getCurrentPosition();
+     motor4Target = -1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
 
-    public static void motorBwdRtDiagTargetPositions (float cmDistance) {
-        // set target positions when driving diagonally right backward (fr -1, bl -1, fl 0, br 0)
-        motor1Target = -1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor2Target = motor_front_left.getCurrentPosition();
-        motor3Target = motor_back_right.getCurrentPosition();
-        motor4Target = -1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+     // set motors to drive to position.
+     motor_front_right.setTargetPosition(motor1Target);
+     motor_front_left.setTargetPosition(motor2Target);
+     motor_back_right.setTargetPosition(motor3Target);
+     motor_front_left.setTargetPosition(motor4Target);
+     }
 
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
-    }
+     public static void motorBwdLtDiagTargetPositions (float cmDistance) {
+     // set target positions when driving diagonally left backward (fr 0, bl 0, fl -1, br -1)
+     motor1Target = motor_front_right.getCurrentPosition();
+     motor2Target = -1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+     motor3Target = -1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+     motor4Target = motor_back_left.getCurrentPosition();
 
-    public static void motorBwdLtDiagTargetPositions (float cmDistance) {
-        // set target positions when driving diagonally left backward (fr 0, bl 0, fl -1, br -1)
-        motor1Target = motor_front_right.getCurrentPosition();
-        motor2Target = -1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor3Target = -1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        motor4Target = motor_back_left.getCurrentPosition();
-
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_front_left.setTargetPosition(motorrTarget);
-    }
-    public static void runMotors() {
+     // set motors to drive to position.
+     motor_front_right.setTargetPosition(motor1Target);
+     motor_front_left.setTargetPosition(motor2Target);
+     motor_back_right.setTargetPosition(motor3Target);
+     motor_front_left.setTargetPosition(motor4Target);
+     }
+     **/
+    public void runMotors(float speed) {
         // sets power of motors so that they will run to position
-        motor_front_right.setPower(0.5);
-        motor_back_right.setPower(0.5);
-        motor_front_left.setPower(0.5);
-        motor_back_left.setPower(0.5);
+        motor_front_right.setPower(speed);
+        motor_back_right.setPower(speed);
+        motor_front_left.setPower(speed);
+        motor_back_left.setPower(speed);
 
         // wait while motors are running
         while (opModeIsActive() && (motor_front_right.isBusy() || motor_front_left.isBusy() || motor_back_right.isBusy() || motor_back_left.isBusy())) {
@@ -191,6 +199,7 @@ public class Autonomous_Functions extends LinearOpMode {
         Initialises all the required variables and objects and initialises them
         ready for the start();
         */
+
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
@@ -220,15 +229,13 @@ public class Autonomous_Functions extends LinearOpMode {
         waitForStart();
         // run during autonomous
         if (opModeIsActive()) {
-            //changes the motor modes to RUN_TO_POSITION
-            motor_front_right.setMode(DcMotor.RUN_TO_POSITION);
-            motor_front_left.setMode(DcMotor.RUN_TO_POSITION);
-            motor_back_right.setMode(DcMotor.RUN_TO_POSITION);
-            motor_back_left.setMode(DcMotor.RUN_TO_POSITION);
-
-
             motorFwdTargetPositions(10);
-            runMotors();
+            //changes the motor modes to RUN_TO_POSITION
+            motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor_back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor_back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            runMotors((float)0.5);
 
 
 
