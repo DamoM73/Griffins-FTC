@@ -287,6 +287,7 @@ public class Red_TurnTable extends LinearOpMode {
 
             //Rotate so DDS faces correct direction
             turnMotors(90);
+            runMotors(0.3,1);
 
             // Continue to Turntable
             motorBwdTargetPositions(60);
@@ -294,6 +295,11 @@ public class Red_TurnTable extends LinearOpMode {
 
             //Turn Turntable
             DDS_motor.setPower(0.6);
+            runtime.reset();
+            while (runtime.seconds() < 2) {
+
+            }
+            DDS_motor.setPower(0);
 
             //Move forward into warehouse
             motorLftTargetPositions(30);

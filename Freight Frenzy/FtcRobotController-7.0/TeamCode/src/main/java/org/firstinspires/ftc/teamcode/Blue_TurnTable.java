@@ -284,6 +284,11 @@ public class Blue_TurnTable extends LinearOpMode {
 
             //Turn Turntable
             DDS_motor.setPower(0.6);
+            runtime.reset();
+            while (runtime.seconds() < 2) {
+
+            }
+            DDS_motor.setPower(0);
 
             //Move forward into warehouse
             motorFwdTargetPositions(30);

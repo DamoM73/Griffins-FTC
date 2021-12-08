@@ -41,26 +41,26 @@ public class Blue_Depot extends LinearOpMode {
             runtime = new ElapsedTime();
     public void motorFwdTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when travelling forward (all +)
-         int motor1Target = (int)motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-         int motor2Target = (int)motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-         int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
-         int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        // set target positions when travelling forward (all +)
+        int motor1Target = (int)motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor2Target = (int)motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
+        int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM);
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
         motor_front_right.setPower(speed);
         motor_front_left.setPower(speed);
         motor_back_right.setPower(speed);
         motor_back_left.setPower(speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = DEGREES_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -76,26 +76,26 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorBwdTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when travelling backward
-         int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        // set target positions when travelling backward
+        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
 
-         // set motors to drive to position
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
         motor_front_right.setPower(-speed);
         motor_front_left.setPower(-speed);
         motor_back_right.setPower(-speed);
         motor_back_left.setPower(-speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = DEGREES_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -111,26 +111,26 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorRgtTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving right (fr -, bl -)
-         int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        // set target positions when driving right (fr -, bl -)
+        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
         motor_front_right.setPower(-speed);
         motor_front_left.setPower(speed);
         motor_back_right.setPower(speed);
         motor_back_left.setPower(-speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = DEGREES_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -146,26 +146,26 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorLftTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving left (fl -, br -)
-         int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        // set target positions when driving left (fl -, br -)
+        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
         motor_front_right.setPower(speed);
         motor_front_left.setPower(-speed);
         motor_back_right.setPower(-speed);
         motor_back_left.setPower(speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = DEGREES_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -181,26 +181,26 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorFwdRgtTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving diagonally right and forward (fr 0, bl 0)
-         int motor1Target = (int)motor_front_right.getCurrentPosition();
-         int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor4Target = (int)motor_back_left.getCurrentPosition();
+        // set target positions when driving diagonally right and forward (fr 0, bl 0)
+        int motor1Target = (int)motor_front_right.getCurrentPosition();
+        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor4Target = (int)motor_back_left.getCurrentPosition();
 
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
-
+        
         motor_back_right.setPower(speed);
         motor_front_left.setPower(speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -210,30 +210,30 @@ public class Blue_Depot extends LinearOpMode {
         // stops motors
         motor_back_right.setPower(0);
         motor_front_left.setPower(0);
-
+        
     }
 
     public void motorFwdLftTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving diagonally left forward (fl 0, br 0)
-         int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-         int motor2Target = (int)motor_front_left.getCurrentPosition();
-         int motor3Target = (int)motor_back_right.getCurrentPosition();
-         int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        // set target positions when driving diagonally left forward (fl 0, br 0)
+        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
+        int motor2Target = (int)motor_front_left.getCurrentPosition();
+        int motor3Target = (int)motor_back_right.getCurrentPosition();
+        int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
-
+        
         motor_front_right.setPower(speed);
         motor_back_left.setPower(speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -247,25 +247,25 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorBwdRgtTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving diagonally right backward (fr -1, bl -1, fl 0, br 0)
-         int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor2Target = (int)motor_front_left.getCurrentPosition();
-         int motor3Target = (int)motor_back_right.getCurrentPosition();
-         int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        // set target positions when driving diagonally right backward (fr -1, bl -1, fl 0, br 0)
+        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor2Target = (int)motor_front_left.getCurrentPosition();
+        int motor3Target = (int)motor_back_right.getCurrentPosition();
+        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
-
+        
         motor_front_right.setPower(-speed);
         motor_back_left.setPower(-speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -279,25 +279,25 @@ public class Blue_Depot extends LinearOpMode {
 
     public void motorBwdLftTargetPositions (float cmDistance, double speed) {
         /**
-         // set target positions when driving diagonally left backward (fr 0, bl 0, fl -1, br -1)
-         int motor1Target = (int)motor_front_right.getCurrentPosition();
-         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-         int motor4Target = (int)motor_back_left.getCurrentPosition();
+        // set target positions when driving diagonally left backward (fr 0, bl 0, fl -1, br -1)
+        int motor1Target = (int)motor_front_right.getCurrentPosition();
+        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
+        int motor4Target = (int)motor_back_left.getCurrentPosition();
 
-         // set motors to drive to position.
-         motor_front_right.setTargetPosition(motor1Target);
-         motor_front_left.setTargetPosition(motor2Target);
-         motor_back_right.setTargetPosition(motor3Target);
-         motor_back_left.setTargetPosition(motor4Target);
-         **/
-
+        // set motors to drive to position.
+        motor_front_right.setTargetPosition(motor1Target);
+        motor_front_left.setTargetPosition(motor2Target);
+        motor_back_right.setTargetPosition(motor3Target);
+        motor_back_left.setTargetPosition(motor4Target);
+        **/
+        
         // sets power of motors
-
+        
         motor_back_right.setPower(-speed);
         motor_front_left.setPower(-speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
         while (runtime.seconds() < time) {
@@ -307,7 +307,7 @@ public class Blue_Depot extends LinearOpMode {
         // stops motors
         motor_back_right.setPower(0);
         motor_front_left.setPower(0);
-
+        
     }
 
     public void turnMotors(int angle, double speed) {
@@ -315,14 +315,14 @@ public class Blue_Depot extends LinearOpMode {
         //motor_front_left.setTargetPosition((int)motor_front_left.getCurrentPosition()+(int)(-1*angle*DRIVE_COUNTS_PER_DEGREE));
         //motor_back_right.setTargetPosition((int)motor_back_right.getCurrentPosition()+(int)(angle*DRIVE_COUNTS_PER_DEGREE));
         //motor_back_left.setTargetPosition((int)motor_back_left.getCurrentPosition()+(int)(-1*angle*DRIVE_COUNTS_PER_DEGREE));
-
+        
         // sets power of motors
         motor_front_right.setPower(speed);
         motor_back_right.setPower(-speed);
         motor_front_left.setPower(speed);
         motor_back_left.setPower(-speed);
         runtime.reset();
-
+        
         //Caluculates time required
         time = DEGREES_PER_SECOND_PER_POWER * angle * speed;
         while (runtime.seconds() < time) {
@@ -384,12 +384,12 @@ public class Blue_Depot extends LinearOpMode {
         motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-
-        arm_motor = hardwareMap.get(DcMotorEx.class, "arm_motor");
-        arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        input_output_motor = hardwareMap.get(DcMotorEx.class, "input_output_motor");
-        DDS_motor = hardwareMap.get(DcMotor.class, "DDS_motor");
-
+        
+         arm_motor = hardwareMap.get(DcMotorEx.class, "arm_motor");
+         arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         input_output_motor = hardwareMap.get(DcMotorEx.class, "input_output_motor");
+         DDS_motor = hardwareMap.get(DcMotor.class, "DDS_motor");
+         
         // initialise sensors
         colour = hardwareMap.get(ColorSensor.class, "left_colour");
         distance = hardwareMap.get(DistanceSensor.class, "left_colour");
@@ -431,27 +431,27 @@ public class Blue_Depot extends LinearOpMode {
                 }
 
                 motorRgtTargetPositions(21,0.05);
-
+                
             }
 
-            //compare distance and set right height for output
-            if(barcode == 0) {
-                arm_motor.setTargetPosition(0);
-                arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm_motor.setVelocity(10);
-            }else {if(barcode == 1) {
-                arm_motor.setTargetPosition(-30);
-                arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm_motor.setVelocity(10);
-            }else {
-                arm_motor.setTargetPosition(-60);
-                arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm_motor.setVelocity(10);
-            }
-            }
-            //activate output
-            input_output_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            input_output_motor.setPower(60);
+             //compare distance and set right height for output
+             if(barcode == 0) {
+             arm_motor.setTargetPosition(0);
+             arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             arm_motor.setVelocity(10);
+             }else {if(barcode == 1) {
+             arm_motor.setTargetPosition(-30);
+             arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             arm_motor.setVelocity(10);
+             }else {
+             arm_motor.setTargetPosition(-60);
+             arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             arm_motor.setVelocity(10);
+             }
+             }
+             //activate output
+             input_output_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+             input_output_motor.setPower(60);
 
             //Turn towards warehouse
             turnMotors(-90,0.03);
