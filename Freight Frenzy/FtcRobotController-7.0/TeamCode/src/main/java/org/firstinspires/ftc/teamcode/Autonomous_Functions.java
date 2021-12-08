@@ -32,6 +32,7 @@ public class Autonomous_Functions extends LinearOpMode {
     static final double WHEEL_CIRCUMFERENCE_MM = 10 * Math.PI;
     static final double DRIVE_COUNTS_PER_MM = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM = DRIVE_COUNTS_PER_MM * 1;
+    static final double DRIVE_COUNTS_PER_DEGREE = 20;
 
     private ElapsedTime
             runtime = new ElapsedTime();
@@ -173,6 +174,12 @@ public class Autonomous_Functions extends LinearOpMode {
         motor_back_left.setTargetPosition(motor4Target);
     }
 
+    public void turnMotors(int angle) {
+        motor_front_right.setTargetPosition((int)motor_front_right.getCurrentPosition()+(int)(angle*DRIVE_COUNTS_PER_DEGREE));
+        motor_front_left.setTargetPosition((int)motor_front_left.getCurrentPosition()+(int)(-1*angle*DRIVE_COUNTS_PER_DEGREE));
+        motor_back_right.setTargetPosition((int)motor_back_right.getCurrentPosition()+(int)(angle*DRIVE_COUNTS_PER_DEGREE));
+        motor_back_left.setTargetPosition((int)motor_back_left.getCurrentPosition()+(int)(-1*angle*DRIVE_COUNTS_PER_DEGREE));
+    }
 
     public void runMotors(double speed) {
         // sets power of motors so that they will run to position
@@ -230,7 +237,7 @@ public class Autonomous_Functions extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        motorBwdRgtTargetPositions(10);
+        turnMotors(360);
         //changes the motor modes to RUN_TO_POSITION
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -242,7 +249,7 @@ public class Autonomous_Functions extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
 
-            runMotors(0.05);
+            runMotors(-0.05);
 
 
 
