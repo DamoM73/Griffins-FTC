@@ -177,8 +177,8 @@ public class Autonomous_Red_C extends LinearOpMode {
         armextend = hardwareMap.get(Servo.class, "Servo_ArmExtension");
         claw = hardwareMap.get(Servo.class, "ServoClaw");
         //initialise sensors
-        colour = hardwareMap.get(ColorSensor.class, "leftColour");
-        distance = hardwareMap.get(DistanceSensor.class, "leftColour");
+        colour = hardwareMap.get(ColorSensor.class, "rightColour");
+        distance = hardwareMap.get(DistanceSensor.class, "rightColour");
         
         //initialise the motor direction
         motor1.setDirection(DcMotor.Direction.REVERSE);
@@ -216,7 +216,7 @@ public class Autonomous_Red_C extends LinearOpMode {
                 j = j +25;
             }
             sleep(1000);
-            rtDrive(42);
+            ltDrive(42);
             telemetry.addData("i;", i);
             telemetry.update();
             //error check - speed
@@ -258,7 +258,7 @@ public class Autonomous_Red_C extends LinearOpMode {
         
         //Move to and spin the turntable
         bwdDrive(100);
-        rtTurn(180);
+        ltTurn(180);
         bwdDrive(148);
         //sets power of the Duck Distribution System to calculated value for ideal velocity
         DDS.setPower(0.5);
@@ -266,7 +266,7 @@ public class Autonomous_Red_C extends LinearOpMode {
         DDS.setPower(0);
         
         // move into storage area 
-        ltDrive(60);
+        rtDrive(60);
         bwdDrive(5);
         
     }

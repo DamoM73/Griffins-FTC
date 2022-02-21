@@ -15,8 +15,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous
-public class Autonomous_Red_C extends LinearOpMode {
+@AutonomousAutonomous_Red_W.java
+public class Autonomous_Red_W extends LinearOpMode {
     //Object defintions
     private Blinker Control_Hub;
     private Blinker Expansion_Hub;
@@ -157,7 +157,6 @@ public class Autonomous_Red_C extends LinearOpMode {
         motor4.setPower(0);
     }
     
-    
      public double extensionPos = 1;
     
     @Override
@@ -211,7 +210,7 @@ public class Autonomous_Red_C extends LinearOpMode {
         int level = 3;
         for (int i = 0; i < 3; i++) {
             if (distance.getDistance(DistanceUnit.CM) < 20) {
-                level = 3 - i;
+                level = i + 1;
                 telemetry.addData("i;", i);
                 j = j +25;
             }
@@ -256,18 +255,9 @@ public class Autonomous_Red_C extends LinearOpMode {
         armlift.setTargetPosition(172);
         armlift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
-        //Move to and spin the turntable
-        bwdDrive(100);
-        rtTurn(180);
-        bwdDrive(148);
-        //sets power of the Duck Distribution System to calculated value for ideal velocity
-        DDS.setPower(0.5);
-        sleep(2000);
-        DDS.setPower(0);
-        
-        // move into storage area 
-        ltDrive(60);
-        bwdDrive(5);
-        
+        //Move to warehouse
+        bwdDrive(80);
+        ltTurn(90);
+        fwdDrive(165);
     }
 }

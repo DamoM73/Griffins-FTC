@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous
+@AutonomousAutonomous_Red_W.java
 public class Autonomous_Red_W extends LinearOpMode {
     //Object defintions
     private Blinker Control_Hub;
@@ -201,13 +201,13 @@ public class Autonomous_Red_W extends LinearOpMode {
         armlift.setTargetPosition(172);
         armlift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armlift.setPower(1);
+        sleep(500);
         
         // Move forward and sense barcode
-        rtDrive(15.5);
         fwdDrive(44.0);
         sleep(500);
         int j = 0;
-        int level = 0;
+        int level = 3;
         for (int i = 0; i < 3; i++) {
             if (distance.getDistance(DistanceUnit.CM) < 20) {
                 level = i + 1;
