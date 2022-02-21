@@ -210,7 +210,7 @@ public class Autonomous_Red_W extends LinearOpMode {
         int level = 3;
         for (int i = 0; i < 3; i++) {
             if (distance.getDistance(DistanceUnit.CM) < 20) {
-                level = i + 1;
+                level = 3-i;
                 telemetry.addData("i;", i);
                 j = j +25;
             }
