@@ -203,7 +203,7 @@ public class Autonomous_Red_W extends LinearOpMode {
         armlift.setPower(1);
         
         // Move forward and sense barcode
-        rtDrive(15.5);
+        //rtDrive(15.5);
         fwdDrive(44.0);
         sleep(500);
         int j = 0;
