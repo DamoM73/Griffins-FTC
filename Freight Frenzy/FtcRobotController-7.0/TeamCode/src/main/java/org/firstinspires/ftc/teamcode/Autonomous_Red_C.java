@@ -211,7 +211,7 @@ public class Autonomous_Red_C extends LinearOpMode {
         int level = 3;
         for (int i = 0; i < 3; i++) {
             if (distance.getDistance(DistanceUnit.CM) < 20) {
-                level = 3 - i;
+                level = i+1;
                 telemetry.addData("i;", i);
                 j = j +25;
             }
@@ -249,6 +249,8 @@ public class Autonomous_Red_C extends LinearOpMode {
         
         armlift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armlift.setPower(1);
+
+        sleep(1000);
         
         intake.setPower(0.5);
         sleep(2000);

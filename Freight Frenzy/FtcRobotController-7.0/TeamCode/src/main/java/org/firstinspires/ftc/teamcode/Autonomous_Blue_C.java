@@ -249,6 +249,7 @@ public class Autonomous_Red_C extends LinearOpMode {
         
         armlift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armlift.setPower(1);
+        sleep(1000);
         
         intake.setPower(0.5);
         sleep(2000);
