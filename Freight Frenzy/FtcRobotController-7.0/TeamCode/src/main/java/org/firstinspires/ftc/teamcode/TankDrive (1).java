@@ -112,7 +112,8 @@ public class TankDrive extends OpMode {
         }**/
         
         // sets the intake power of the right
-        intake.setPower(0.5 * gamepad2.right_stick_y);
+        if (gamepad1.a == true):
+            intake.setPower(0.5);
         
         /** commented for future reference NOT TO BE USED
         // sets the height of arm to be first level of shipping hub (7.62 cm)
