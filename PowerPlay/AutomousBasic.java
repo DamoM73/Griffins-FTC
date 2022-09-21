@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.compcode.PowerPlay;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.Gyroscope;
-import java.lang.annotation.Target;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -26,24 +28,112 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Encoder_Test")
-public class Encoder_Test extends LinearOpMode {
-    private DcMotor Motor;
-    //Convert from the counts per revolution of the encoder to counts per inch
-
+@Autonomous(name = "BasicAutonomousTesting")
+public class BasicAutonomousTesting extends LinearOpMode {
+    public DcMotor Motor;
     // Create objects for this robot
-    private Blinker expansion_Hub_2;
-    private BNO055IMU imu;
-    private Orientation lastAngles = new Orientation();
+    public Blinker expansion_Hub_2;
+    public BNO055IMU imu;
+    public Orientation lastAngles = new Orientation();
     
-    private DcMotor motor_front_right;
-    private DcMotor motor_back_right;
-    private DcMotor motor_front_left;
-    private DcMotor motor_back_left;
+    public DcMotor motor_front_right;
+    public DcMotor motor_back_right;
+    public DcMotor motor_front_left;
+    public DcMotor motor_back_left;
 
+    private DcMotorEx arm_motor;
+    private DcMotorEx input_output_motor;
+    private DcMotor DDS_motor;
     private ColorSensor colour;
     private DistanceSensor distance;
 
+    
+    
+    public void addTelemetry(String name, double value) {
+        telemetry.addData(name,value);
+    }
+
+    public void updateTelemetry() {
+        telemetry.update();
+    }
+
+    @Override
+    public void runOpMode() {
+        /*
+        SETUP
+        Initialises all the required variables and objects and initialises them
+        ready for the start();
+        */
+
+
+        // initialise objects for expansion hub components
+        //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
+        expansion_Hub_2 = hardwareMap.get(Blinker.class, "Control Hub");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        telemetry.addData("Mode", "calibrating...");
+        telemetry.update();
+
+        // make sure the imu gyro is calibrated before continuing.
+        while (!isStopRequested() && !imu.isGyroCalibrated()){
+            try {
+                Thread.sleep(7000);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+            
+        
+        // initialise object for the dc motor
+        motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
+        motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
+        motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
+        motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
+
+        // initialise the directions of the motors
+        motor_front_right.setDirection(DcMotor.Direction.FORWARD);
+        motor_front_left.setDirection(DcMotor.Direction.REVERSE);
+        motor_back_right.setDirection(DcMotor.Direction.FORWARD);
+        motor_back_left.setDirection(DcMotor.Direction.REVERSE);
+
+        
+        // initialise sensors
+        //colour = hardwareMap.get(ColorSensor.class, "colour");
+        //distance = hardwareMap.get(DistanceSensor.class, "colour");
+        
+        Motion driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
+        
+        // set up telemetry to disply on driver station
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        // run during autonomous
+        if (opModeIsActive()) {
+            //Move forwards
+            driveTrain.motorFwdTargetPositions(100,0.5);
+        }
+    }
+}
+
+class Motion {
+    public Blinker expansion_Hub_2;
+    public BNO055IMU imu;
+    public Orientation lastAngles = new Orientation();
+    
+    public DcMotor motor_front_right;
+    public DcMotor motor_back_right;
+    public DcMotor motor_front_left;
+    public DcMotor motor_back_left;
+    
     // convert count per revolution to counts per cm 
     static final double HD_COUNTS_PER_REV = 28;
     static final double DRIVE_GEAR_REDUCTION = ((1+(46/11))*(1+(46/11)));
@@ -53,6 +143,44 @@ public class Encoder_Test extends LinearOpMode {
     static final double DRIVE_COUNTS_PER_MM_SIDEWAYS = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM_SIDEWAYS = DRIVE_COUNTS_PER_MM_SIDEWAYS * 10;
 
+    private float motor1_power(float jY, float jX, float rX) {
+        return ((jX + jY)/2 - rX /2);
+    }
+
+    private float motor2_power(float jY, float jX, float rX) {
+        return ((jY - jX)/2 + rX /2);
+    }
+
+    private float motor3_power(float jY, float jX, float rX) {
+        return ((jY - jX)/2 - rX /2);
+    }
+
+    private float motor4_power(float jY, float jX, float rX) {
+        return ((jX + jY)/2 + rX /2);
+    }
+    
+    Motion (DcMotor motor_front_rightN,DcMotor motor_back_leftN, DcMotor motor_front_leftN, DcMotor motor_back_rightN,BNO055IMU imuN) {
+        this.motor_front_right = motor_front_rightN;
+        this.motor_back_left = motor_back_leftN;
+        this.motor_front_left = motor_front_leftN;
+        this.motor_back_right = motor_back_rightN;
+        this.imu = imuN;
+        
+        
+        this.motor_front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor_front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor_back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor_back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+    
+    public void JoystickMoving (float left_x,float right_x,float right_y) {
+        motor_front_right.setPower(motor2_power(right_y*-1, right_x, -left_x));
+        motor_back_right.setPower(motor4_power(right_y*-1, right_x, -left_x));
+        motor_front_left.setPower(motor1_power(right_y*-1, right_x, -left_x));;
+        motor_back_left.setPower(motor3_power(right_y*-1, right_x, -left_x));
+    }
+    
     public void motorFwdTargetPositions (float cmDistance, double speed) {
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -85,7 +213,12 @@ public class Encoder_Test extends LinearOpMode {
         
         //Waits until motors finished
         while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
-            idle();
+            try {
+                Thread.sleep(7000);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
         }
 
         // stops motors
@@ -127,11 +260,12 @@ public class Encoder_Test extends LinearOpMode {
         
         //Waits until motors finished
         while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
-            telemetry.addData("Front Right", motor_front_right.isBusy());
-            telemetry.addData("Front Left", motor_front_left.isBusy());
-            telemetry.addData("Back Right", motor_back_right.isBusy());
-            telemetry.addData("Back Left", motor_back_left.isBusy());
-            telemetry.update();
+            try {
+                Thread.sleep(7000);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
         }
 
         // stops motors
@@ -173,11 +307,12 @@ public class Encoder_Test extends LinearOpMode {
         
         //Waits until motors finished
         while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
-            telemetry.addData("Front Right", motor_front_right.getCurrentPosition());
-            telemetry.addData("Front Left", motor_front_left.getCurrentPosition());
-            telemetry.addData("Back Right", motor_back_right.getCurrentPosition());
-            telemetry.addData("Back Left", motor_back_left.getCurrentPosition());
-            telemetry.update();
+            try {
+                Thread.sleep(7000);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
         }
 
         // stops motors
@@ -222,12 +357,12 @@ public class Encoder_Test extends LinearOpMode {
         
         //Waits until motors finished
         while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
-            telemetry.addData("Front Right", motor_front_right.getCurrentPosition());
-            telemetry.addData("Front Left", motor_front_left.getCurrentPosition());
-            telemetry.addData("Back Right", motor_back_right.getCurrentPosition());
-            telemetry.addData("Back Left", motor_back_left.getCurrentPosition());
-            telemetry.update();
-            sleep(10);
+            try {
+                Thread.sleep(7000);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
         }
 
         // stops motors
@@ -237,139 +372,6 @@ public class Encoder_Test extends LinearOpMode {
         motor_back_left.setPower(0);
     }
     
-    /**
-    public void motorFwdRgtTargetPositions (float cmDistance, double speed) {
-        
-        // set target positions when driving diagonally right and forward (fr 0, bl 0)
-        int motor1Target = (int)motor_front_right.getCurrentPosition();
-        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        int motor4Target = (int)motor_back_left.getCurrentPosition();
-
-
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_back_left.setTargetPosition(motor4Target);
-        
-        
-        // sets power of motors
-        
-        motor_back_right.setPower(speed);
-        motor_front_left.setPower(speed);
-        runtime.reset();
-        
-        //Caluculates time required
-        time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
-        while (runtime.seconds() < time) {
-
-        }
-
-        // stops motors
-        motor_back_right.setPower(0);
-        motor_front_left.setPower(0);
-        
-    }
-
-    public void motorFwdLftTargetPositions (float cmDistance, double speed) {
-        
-        // set target positions when driving diagonally left forward (fl 0, br 0)
-        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-        int motor2Target = (int)motor_front_left.getCurrentPosition();
-        int motor3Target = (int)motor_back_right.getCurrentPosition();
-        int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM));
-
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_back_left.setTargetPosition(motor4Target);
-        
-        
-        // sets power of motors
-        
-        motor_front_right.setPower(speed);
-        motor_back_left.setPower(speed);
-        runtime.reset();
-        
-        //Caluculates time required
-        time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
-        while (runtime.seconds() < time) {
-
-        }
-
-        // stops motors
-        motor_front_right.setPower(0);
-        motor_back_left.setPower(0);
-    }
-
-    public void motorBwdRgtTargetPositions (float cmDistance, double speed) {
-        
-        // set target positions when driving diagonally right backward (fr -1, bl -1, fl 0, br 0)
-        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-        int motor2Target = (int)motor_front_left.getCurrentPosition();
-        int motor3Target = (int)motor_back_right.getCurrentPosition();
-        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_back_left.setTargetPosition(motor4Target);
-        
-        
-        // sets power of motors
-        
-        motor_front_right.setPower(-speed);
-        motor_back_left.setPower(-speed);
-        runtime.reset();
-        
-        //Caluculates time required
-        time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
-        while (runtime.seconds() < time) {
-
-        }
-
-        // stops motors
-        motor_front_right.setPower(0);
-        motor_back_left.setPower(0);
-    }
-
-    public void motorBwdLftTargetPositions (float cmDistance, double speed) {
-        
-        // set target positions when driving diagonally left backward (fr 0, bl 0, fl -1, br -1)
-        int motor1Target = (int)motor_front_right.getCurrentPosition();
-        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM)));
-        int motor4Target = (int)motor_back_left.getCurrentPosition();
-
-        // set motors to drive to position.
-        motor_front_right.setTargetPosition(motor1Target);
-        motor_front_left.setTargetPosition(motor2Target);
-        motor_back_right.setTargetPosition(motor3Target);
-        motor_back_left.setTargetPosition(motor4Target);
-        
-        
-        // sets power of motors
-        
-        motor_back_right.setPower(-speed);
-        motor_front_left.setPower(-speed);
-        runtime.reset();
-        
-        //Caluculates time required
-        time = CM_PER_SECOND_PER_POWER * cmDistance * speed;
-        while (runtime.seconds() < time) {
-
-        }
-
-        // stops motors
-        motor_back_right.setPower(0);
-        motor_front_left.setPower(0);
-        
-    }
-    **/
-
     private double getAngle() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -418,11 +420,8 @@ public class Encoder_Test extends LinearOpMode {
 
         // rotate until turn is completed.
         double gap = absolute(getAngle() - target);
-        telemetry.addData("Gyroscope",getAngle());
-        telemetry.addData("Gap",gap);
-        telemetry.update();
-        sleep(1000);
-        while (gap>1 && opModeIsActive()) {
+
+        while (gap>1) {
             gap = absolute(getAngle() - target);
             if (gap > 360){gap-=360;}
             
@@ -453,77 +452,5 @@ public class Encoder_Test extends LinearOpMode {
         motor_back_right.setPower(0);
         motor_front_left.setPower(0);
         motor_back_left.setPower(0);
-
-        // wait for rotation to stop.
-        telemetry.addData("Finished","Finished");
-        telemetry.update();
-    }
-    
-    @Override
-    public void runOpMode() {
-        /*
-        SETUP
-        Initialises all the required variables and objects and initialises them
-        ready for the start();
-        */
-
-
-        // initialise objects for expansion hub components
-        //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
-        expansion_Hub_2 = hardwareMap.get(Blinker.class, "Control Hub");
-        
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        telemetry.addData("Mode", "calibrating...");
-        telemetry.update();
-        // make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
-        {
-            sleep(50);
-            idle();
-        }
-        
-        // initialise object for the dc motor
-        motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
-        motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
-        motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
-        motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-
-        // initialise sensors
-        //colour = hardwareMap.get(ColorSensor.class, "colour");
-        //distance = hardwareMap.get(DistanceSensor.class, "colour");
-
-        // initialise the directions of the motors
-        motor_front_right.setDirection(DcMotor.Direction.FORWARD);
-        motor_front_left.setDirection(DcMotor.Direction.REVERSE);
-        motor_back_right.setDirection(DcMotor.Direction.FORWARD);
-        motor_back_left.setDirection(DcMotor.Direction.REVERSE);
-
-        motor_front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor_front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor_back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor_back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-
-        // set up telemetry to disply on driver station
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        // run during autonomous
-        if (opModeIsActive()) {
-            for (int i=1;i<9;i++){
-                rotate(90,0.4);
-                
-            }
-        }
     }
 }
