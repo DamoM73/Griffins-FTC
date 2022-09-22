@@ -40,6 +40,8 @@ public class BasicAutonomousTesting extends LinearOpMode {
     public DcMotor motor_back_right;
     public DcMotor motor_front_left;
     public DcMotor motor_back_left;
+    public DcMotor left_lift_motor;
+    public DcMotor right_lift_motor;
 
     private DcMotorEx arm_motor;
     private DcMotorEx input_output_motor;
@@ -97,11 +99,15 @@ public class BasicAutonomousTesting extends LinearOpMode {
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
 
+        left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
+        right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
+
         // initialise the directions of the motors
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
         motor_front_left.setDirection(DcMotor.Direction.REVERSE);
         motor_back_right.setDirection(DcMotor.Direction.FORWARD);
         motor_back_left.setDirection(DcMotor.Direction.REVERSE);
+
 
         
         // initialise sensors
@@ -109,7 +115,9 @@ public class BasicAutonomousTesting extends LinearOpMode {
         //distance = hardwareMap.get(DistanceSensor.class, "colour");
         
         Motion driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
-        
+        Lift lift = new Lift(left_lift_motor,right_lift_motor);
+
+
         // set up telemetry to disply on driver station
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -452,5 +460,73 @@ class Motion {
         motor_back_right.setPower(0);
         motor_front_left.setPower(0);
         motor_back_left.setPower(0);
+    }
+}
+
+class Lift {
+    public Blinker expansion_Hub_2;
+
+    private DcMotor left_lift_motor;
+    private DcMotor right_lift_motor;
+    
+    public int currentPosition;
+    public int[] positions = {0,7,11,4,};
+    
+    
+    Lift (DcMotor left_lift_motor,DcMotor right_lift_motor) {
+        this.left_lift_motor = left_lift_motor;
+        this.right_lift_motor = right_lift_motor;
+    }
+    
+    public void SetMoveSpeed(double speed){
+        // Positive for up, negative for down
+        if (-0.1 < speed && speed < 0.1) {
+            right_lift_motor.setTargetPosition(right_lift_motor.getCurrentPosition());
+            left_lift_motor.setTargetPosition(right_lift_motor.getCurrentPosition());
+            
+            right_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            left_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+            right_lift_motor.setPower(0.1);
+            left_lift_motor.setPower(0.1);
+        }
+        else {
+            right_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            left_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            
+            right_lift_motor.setPower(speed);
+            left_lift_motor.setPower(speed);
+        }
+    }
+    
+    public void MoveToPosition(int position) {
+        right_lift_motor.setTargetPosition(position);
+        left_lift_motor.setTargetPosition(position);
+            
+        right_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+        right_lift_motor.setPower(0.7);
+        left_lift_motor.setPower(0.7);
+    }
+    
+    public void MoveInPositionList(int direction) {
+        UpdateLiftPosition()
+        int position_of_lower
+        int position_of_upper
+        for (int i = 0; i < positions.length; i++) {
+            if (positions[i] < currentPosition) {
+                position_of_lower = i
+            }
+            else if (positions[i] > currentPosition && position_of_upper is Null){
+                position_of_upper = i
+            }
+            
+        }
+    }
+    
+    public int UpdateLiftPosition() {
+        currentPosition = (int)(right_lift_motor.getCurrentPosition() + left_lift_motor.getCurrentPosition())/2;
+        return currentPosition;
     }
 }
