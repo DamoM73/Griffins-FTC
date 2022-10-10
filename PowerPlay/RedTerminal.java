@@ -159,7 +159,7 @@ public class RedSideRedTerminal extends LinearOpMode {
                 // If 1 (leftmost)
                 driveTrain.motorFwdTargetPositions(square,0.4)
                 driveTrain.rotate(-90)
-                lift.setTargetPosition(lift.positions[2])
+                lift.MoveToPositionString('medium')
                 intake.putDownConeAuto()
                 driveTrain.motorLftTargetPositions(square/2,0.5)
                 driveTrain.motorBwdTargetPositions(square,0.5)
@@ -167,14 +167,14 @@ public class RedSideRedTerminal extends LinearOpMode {
                 // If 2 (middle)
                 driveTrain.motorFwdTargetPositions(square,0.4)
                 driveTrain.rotate(-90)
-                lift.setTargetPosition(lift.positions[2])
+                lift.MoveToPositionString('medium')
                 intake.putDownConeAuto()
             } else {
                 // If 3 (rightmost)
                 driveTrain.motorRgtTargetPositions(square,0.4)
                 driveTrain.motorFwdTargetPositions(square*1.5,0.4)
                 driveTrain.rotate(-90)
-                lift.setTargetPosition(lift.positions[3])
+                lift.MoveToPositionString('high')
                 intake.putDownConeAuto()
             }
         }

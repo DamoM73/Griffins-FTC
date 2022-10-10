@@ -2,7 +2,7 @@ package org.firstinspires.ftc.compcode.PowerPlay;
 
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import java.util.ArrayList;
 
 
 public class Lift {
@@ -12,12 +12,20 @@ public class Lift {
     private DcMotor right_lift_motor;
     
     public int currentPosition;
-    public int[] positions = {0,7,11,4,};
-    
-    
+    public int[] positions = {0,2,7,11,14,};
+    ArrayList<String> StrPos = new ArrayList<String>();
+
     Lift (DcMotor left_lift_motor,DcMotor right_lift_motor) {
         this.left_lift_motor = left_lift_motor;
         this.right_lift_motor = right_lift_motor;
+        right_lift_motor.setDirection(DcMotor.Direction.REVERSE);
+        
+        StrPos.add("bottom");
+        StrPos.add("round");
+        StrPos.add("low");
+        StrPos.add("medium");
+        StrPos.add("high");
+        
     }
     
     public void SetMoveSpeed(double speed){
@@ -52,6 +60,19 @@ public class Lift {
         left_lift_motor.setPower(0.7);
     }
     
+    public void MoveToPositionString(String position) {
+        int TargPosition = StrPos.indexOf(position);
+
+        right_lift_motor.setTargetPosition(TargPosition);
+        left_lift_motor.setTargetPosition(TargPosition);
+            
+        right_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+        right_lift_motor.setPower(0.7);
+        left_lift_motor.setPower(0.7);
+    }
+
     public void MoveInPositionList(int direction) {
         UpdateLiftPosition();
         int position_of_lower=0;
