@@ -11,10 +11,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 public class Motion {
+    // Initialise control hub
     public Blinker expansion_Hub_2;
     public BNO055IMU imu;
     public Orientation lastAngles = new Orientation();
     
+    // Initialise motor objects.
     public DcMotor motor_front_right;
     public DcMotor motor_back_right;
     public DcMotor motor_front_left;
@@ -29,6 +31,7 @@ public class Motion {
     static final double DRIVE_COUNTS_PER_MM_SIDEWAYS = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM_SIDEWAYS = DRIVE_COUNTS_PER_MM_SIDEWAYS * 10;
 
+    // Initiliase variables
     private Boolean turning = false;
     private double gap;
     private double target;
@@ -38,23 +41,38 @@ public class Motion {
     private int degrees;
 
 
-    private float motor1_power(float jY, float jX, float rX) {
+    private float front_left_power(float jY, float jX, float rX) {
+        /**
+        Use joystick positions to translate to front left motor power for mechanum drive.
+        **/
         return ((jX + jY)/2 - rX /2);
     }
 
-    private float motor2_power(float jY, float jX, float rX) {
+    private float front_right_power(float jY, float jX, float rX) {
+        /**
+        Use joystick positions to translate to front right motor power for mechanum drive.
+        **/
         return ((jY - jX)/2 + rX /2);
     }
 
-    private float motor3_power(float jY, float jX, float rX) {
+    private float back_left_power(float jY, float jX, float rX) {
+        /**
+        Use joystick positions to translate to back left motor power for mechanum drive.
+        **/
         return ((jY - jX)/2 - rX /2);
     }
 
-    private float motor4_power(float jY, float jX, float rX) {
+    private float back_right_powe(float jY, float jX, float rX) {
+        /**
+        Use joystick positions to translate to back right motor power for mechanum drive.
+        **/
         return ((jX + jY)/2 + rX /2);
     }
     
     Motion (DcMotor motor_front_rightN,DcMotor motor_back_leftN, DcMotor motor_front_leftN, DcMotor motor_back_rightN,BNO055IMU imuN) {
+        /**
+        Constructor method for motors.
+        **/
         this.motor_front_right = motor_front_rightN;
         this.motor_back_left = motor_back_leftN;
         this.motor_front_left = motor_front_leftN;
@@ -64,6 +82,9 @@ public class Motion {
     }
     
     public void JoystickMoving (float left_x,float right_x,float right_y) {
+        /**
+        Uses joystick controls to move the robot.
+        **/
         if (turning) {
             gap = absolute(getAngle() - target);
             if (gap > 360){gap-=360;}
@@ -97,14 +118,18 @@ public class Motion {
                 turning = false;
             }
         } else {
-        motor_front_right.setPower(motor2_power(right_y*-1, right_x*-1, -left_x));
-        motor_back_right.setPower(motor4_power(right_y*-1, right_x*-1, -left_x));
-        motor_front_left.setPower(motor1_power(right_y*-1, right_x*-1, -left_x));;
-        motor_back_left.setPower(motor3_power(right_y*-1, right_x*-1, -left_x));
+        motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, -left_x));
+        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
+        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
+        motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, -left_x));
         }
     }
     
     public void motorFwdTargetPositions (float cmDistance, double speed) {
+        /**
+        Calculates motor encoder values and applies them for moving forward
+        Inputs: distance, speed
+        **/
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -152,6 +177,10 @@ public class Motion {
     }
     
     public void motorBwdTargetPositions (float cmDistance, double speed) {
+        /**
+        Calculates motor encoder values and applies them for moving backward
+        Inputs: distance, speed
+        **/
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -168,7 +197,6 @@ public class Motion {
         motor_front_left.setTargetPosition(motor2Target);
         motor_back_right.setTargetPosition(motor3Target);
         motor_back_left.setTargetPosition(motor4Target);
-        
         
         // sets power of motors
         motor_front_right.setPower(-speed);
@@ -199,6 +227,10 @@ public class Motion {
     }
     
     public void motorRgtTargetPositions (float cmDistance, double speed) {
+        /**
+        Calculates motor encoder values and applies them for moving right
+        Inputs: distance, speed
+        **/
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -246,12 +278,15 @@ public class Motion {
     }
     
     public void motorLftTargetPositions (float cmDistance, double speed) {
+        /**
+        Calculates motor encoder values and applies them for moving left
+        Inputs: distance, speed
+        **/
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        
-        
+                
         // set target positions when driving left (fl -, br -)
         int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
@@ -271,7 +306,7 @@ public class Motion {
         motor_back_right.setPower(-speed);
         motor_back_left.setPower(speed);
 
-        
+        // Starts motors
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -296,18 +331,30 @@ public class Motion {
     }
     
     private double getAngle() {
+        /**
+        Gets the robots angle from gyroscope
+        Returns angles
+        **/
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         return angles.firstAngle;
     }
     
     private double absolute(double number){
+        /**
+        Returns the absolute value of a number
+        Returns number
+        **/
         if (number>0){return number;}
         else {return number*-1;}
     }
     
-    public void rotate(int degrees, double power)
-    {
+    public void rotate(int degrees, double power){
+        /**
+        Rotates the robot around.
+        Clockwise degrees are negative
+        Inputs: degrees to turn, power
+        **/
         double  leftPower, rightPower;
         
         // restart imu movement tracking.

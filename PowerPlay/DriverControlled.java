@@ -36,11 +36,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class DriverControlled extends OpMode {
     /* Declare OpMode members. */
     public DcMotor Motor;
-    // Create objects for this robot
+    // Create expansion hub for this robot
     public Blinker expansion_Hub_2;
+    
+    // Initialise variables for gyroscope
     public BNO055IMU imu;
     public Orientation lastAngles = new Orientation();
     
+    // Initialise motors
     public DcMotor motor_front_right;
     public DcMotor motor_back_right;
     public DcMotor motor_front_left;
@@ -53,25 +56,30 @@ public class DriverControlled extends OpMode {
     private ColorSensor colour;
     private DistanceSensor distance;
     **/
+    
+    // Initialise interfaces with other modules
     Motion drivetrain;
     Lift lift;
     Intake intake;
 
     @Override
     public void init() {
+        // Create expansion hub
         expansion_Hub_2 = hardwareMap.get(Blinker.class, "Control Hub");
+        
+        // Create gyroscope
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled      = false;
-
+        // Calibrate Gyro
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         telemetry.addData("Mode", "calibrating...");
         telemetry.update();
 
-        // make sure the imu gyro is calibrated before continuing.
+        // Wait until gyroscope calibrated
         while (!imu.isGyroCalibrated()){
             try {
                 Thread.sleep(100);   
@@ -82,16 +90,17 @@ public class DriverControlled extends OpMode {
         }
             
         
-        // initialise object for the dc motor
+        // initialise motors
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
         motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-        /**
+        
+        
         left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
         right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
-        intake_motor = hardwareMap.get(Servo.class, "intake_servo");
-        **/
+        //intake_motor = hardwareMap.get(Servo.class, "intake_servo");
+        
         // initialise the directions of the motors
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
         motor_front_left.setDirection(DcMotor.Direction.REVERSE);
@@ -99,17 +108,24 @@ public class DriverControlled extends OpMode {
         motor_back_left.setDirection(DcMotor.Direction.REVERSE);
 
 
-        drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
+        
+        // initialise sensors
         /**
-        Lift lift = new Lift(left_lift_motor,right_lift_motor);
-        Intake intake = new Intake(intake_motor);
+        colour = hardwareMap.get(ColorSensor.class, "colour");
+        distance = hardwareMap.get(DistanceSensor.class, "colour");
         **/
+
+        // Create module references
+        drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
+        
+        Lift lift = new Lift(left_lift_motor,right_lift_motor);
+        //Intake intake = new Intake(intake_motor);
+        
 
         // set up telemetry to disply on driver station
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
-
 
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -136,7 +152,7 @@ public class DriverControlled extends OpMode {
         else if (this.gamepad1.dpad_right) {
             drivetrain.rotateAuto(-90,0.4);
         }
-        /**
+        
         // Lift
         lift.SetMoveSpeed(gamepad2.left_stick_x);
         if (gamepad2.dpad_up) {
@@ -145,8 +161,8 @@ public class DriverControlled extends OpMode {
             lift.MoveInPositionList(-1);
         }
 
-        telemetry.addData("LiftPosition",lift.currentPosition);
-
+        /**
+        // Intake
         if (gamepad2.b) {
             intake.pickUpCone();
         }
