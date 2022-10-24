@@ -44,8 +44,8 @@ public class Lift {
             right_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             left_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             
-            right_lift_motor.setPower(speed);
-            left_lift_motor.setPower(speed);
+            right_lift_motor.setPower(speed*0.5);
+            left_lift_motor.setPower(speed*0.5);
         }
     }
     
@@ -117,4 +117,7 @@ public class Lift {
         return currentPosition;
     }
 }
+
+
+
 

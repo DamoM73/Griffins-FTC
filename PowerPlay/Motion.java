@@ -198,6 +198,7 @@ public class Motion {
         motor_back_right.setTargetPosition(motor3Target);
         motor_back_left.setTargetPosition(motor4Target);
         
+        
         // sets power of motors
         motor_front_right.setPower(-speed);
         motor_front_left.setPower(-speed);
@@ -286,7 +287,8 @@ public class Motion {
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
-                
+        
+        
         // set target positions when driving left (fl -, br -)
         int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));

@@ -99,7 +99,7 @@ public class DriverControlled extends OpMode {
         
         left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
         right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
-        //intake_motor = hardwareMap.get(Servo.class, "intake_servo");
+        intake_motor = hardwareMap.get(Servo.class, "intake_servo");
         
         // initialise the directions of the motors
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
@@ -118,8 +118,8 @@ public class DriverControlled extends OpMode {
         // Create module references
         drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
         
-        Lift lift = new Lift(left_lift_motor,right_lift_motor);
-        //Intake intake = new Intake(intake_motor);
+        lift = new Lift(left_lift_motor,right_lift_motor);
+        intake = new Intake(intake_motor);
         
 
         // set up telemetry to disply on driver station
@@ -154,14 +154,14 @@ public class DriverControlled extends OpMode {
         }
         
         // Lift
-        lift.SetMoveSpeed(gamepad2.left_stick_x);
+        lift.SetMoveSpeed(gamepad2.left_stick_y);
         if (gamepad2.dpad_up) {
             lift.MoveInPositionList(1);
         } else if (gamepad2.dpad_down) {
             lift.MoveInPositionList(-1);
         }
 
-        /**
+        
         // Intake
         if (gamepad2.b) {
             intake.pickUpCone();
@@ -173,6 +173,6 @@ public class DriverControlled extends OpMode {
             intake.stopRuning();
         
         }
-        **/
+        
     }
 }
