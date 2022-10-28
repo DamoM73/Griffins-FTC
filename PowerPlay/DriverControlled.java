@@ -99,14 +99,17 @@ public class DriverControlled extends OpMode {
         
         left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
         right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
+        left_lift_motor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        right_lift_motor.setMode(DcMotor.RunMode.RESET_ENCODERS);
         intake_motor = hardwareMap.get(Servo.class, "intake_servo");
         
         // initialise the directions of the motors
+        /**
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
         motor_front_left.setDirection(DcMotor.Direction.REVERSE);
         motor_back_right.setDirection(DcMotor.Direction.FORWARD);
         motor_back_left.setDirection(DcMotor.Direction.REVERSE);
-
+        **/
 
         
         // initialise sensors
@@ -143,7 +146,7 @@ public class DriverControlled extends OpMode {
     public void loop() {
         // Movement
         // Standard Mechannum
-        drivetrain.JoystickMoving(gamepad1.right_stick_y,gamepad1.right_stick_x,gamepad1.left_stick_x);
+        drivetrain.JoystickMoving(gamepad1.left_stick_x, gamepad1.right_stick_x,gamepad1.right_stick_y);
         
         // 90 degree turns
         if (this.gamepad1.dpad_left) {
@@ -154,11 +157,17 @@ public class DriverControlled extends OpMode {
         }
         
         // Lift
-        lift.SetMoveSpeed(gamepad2.left_stick_y);
-        if (gamepad2.dpad_up) {
-            lift.MoveInPositionList(1);
-        } else if (gamepad2.dpad_down) {
-            lift.MoveInPositionList(-1);
+        telemetry.addData("Lift Right",lift.getRightPosition());
+        telemetry.addData("Lift Left",lift.getLeftPosition());
+        telemetry.addData("Lift Target",lift.getTargetPosition());
+        telemetry.addData("Lift Speed",lift.getSpeed());
+        
+        lift.SetMoveSpeed(gamepad2.left_stick_y,gamepad2.right_stick_y);
+        
+        if (gamepad2.dpad_down) {
+            telemetry.addData("Lift Target Name",lift.MoveToPositionString("low"));
+        } else if (gamepad2.dpad_right) {
+            telemetry.addData("Lift Target Name",lift.MoveToPositionString("medium"));
         }
 
         
@@ -171,8 +180,7 @@ public class DriverControlled extends OpMode {
         }
         if (gamepad2.a) {
             intake.stopRuning();
-        
         }
-        
+        telemetry.update();
     }
 }

@@ -52,17 +52,17 @@ public class Motion {
         /**
         Use joystick positions to translate to front right motor power for mechanum drive.
         **/
-        return ((jY - jX)/2 + rX /2);
+        return ((jX - jY)/2 + rX /2);
     }
 
     private float back_left_power(float jY, float jX, float rX) {
         /**
         Use joystick positions to translate to back left motor power for mechanum drive.
         **/
-        return ((jY - jX)/2 - rX /2);
+        return ((jX - jY)/2 - rX /2);
     }
 
-    private float back_right_powe(float jY, float jX, float rX) {
+    private float back_right_power(float jY, float jX, float rX) {
         /**
         Use joystick positions to translate to back right motor power for mechanum drive.
         **/
@@ -119,8 +119,8 @@ public class Motion {
             }
         } else {
         motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, -left_x));
-        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
-        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
+        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, left_x));
+        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, left_x));;
         motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, -left_x));
         }
     }
