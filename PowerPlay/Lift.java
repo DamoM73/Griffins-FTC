@@ -12,16 +12,17 @@ public class Lift {
     private DcMotor right_lift_motor;
     
     public int currentPosition;
-    public int[] positions = {0,-20,-150,-300,-480};
+    public int[] positions = {0,2,7,11,14,};
     ArrayList<String> StrPos = new ArrayList<String>();
-    
-    int TargPos = 0;
-    float speed = 1;
 
     Lift (DcMotor left_lift_motor,DcMotor right_lift_motor) {
         this.left_lift_motor = left_lift_motor;
         this.right_lift_motor = right_lift_motor;
-        right_lift_motor.setDirection(DcMotor.Direction.REVERSE);
+        left_lift_motor.setDirection(DcMotor.Direction.REVERSE);
+        right_lift_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_lift_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_lift_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left_lift_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         
         StrPos.add("bottom");
         StrPos.add("round");
@@ -29,59 +30,56 @@ public class Lift {
         StrPos.add("medium");
         StrPos.add("high");
         
-        right_lift_motor.setTargetPosition(TargPos);
-        left_lift_motor.setTargetPosition(TargPos);
-        
-        right_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        left_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            
-        right_lift_motor.setPower(speed);
-        left_lift_motor.setPower(speed);
-        
     }
     
-    public int getLeftPosition(){
-        return left_lift_motor.getCurrentPosition();
-    }
-    
-    public int getRightPosition(){
-        return right_lift_motor.getCurrentPosition();
-    }
-    public int getTargetPosition(){
-        return TargPos;
-    }
-
-    public float getSpeed(){
-        return speed;
-    }
-    
-    
-    public void SetMoveSpeed(double distance, float changeSpeed){
+    public void SetMoveSpeed(double speed){
+        speed *= -1;
         // Positive for up, negative for down
-        if (-0.1 < distance && distance < 0.1) {
+        if (-0.1 < speed && speed < 0.1) {
+            right_lift_motor.setPower(0);
+            left_lift_motor.setPower(0);
         }
         else {
-            TargPos += distance;
+            right_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            left_lift_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            
+            right_lift_motor.setPower(speed*0.5);
+            left_lift_motor.setPower(speed*0.5);
         }
-        speed += changeSpeed/-100;
-        
-        right_lift_motor.setTargetPosition(TargPos);
-        left_lift_motor.setTargetPosition(TargPos);
-        right_lift_motor.setPower(speed);
-        left_lift_motor.setPower(speed);
     }
     
     public void MoveToPosition(int position) {
-        TargPos = position;
+        right_lift_motor.setTargetPosition(position);
+        left_lift_motor.setTargetPosition(position);
+            
+        right_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left_lift_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+        right_lift_motor.setPower(0.7);
+        left_lift_motor.setPower(0.7);
+        
+        while (right_lift_motor.isBusy() || left_lift_motor.isBusy()){
+            try {
+                Thread.sleep(100);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+        
+        right_lift_motor.setPower(0.2);
+        left_lift_motor.setPower(0.2);
+        
     }
     
-    public int MoveToPositionString(String position) {
-        TargPos = positions[StrPos.indexOf(position)];
-        return TargPos;
+    public void MoveToPositionString(String position) {
+        int TargPosition = StrPos.indexOf(position);
+
+        MoveToPosition(TargPosition);
     }
 
     public void MoveInPositionList(int direction) {
-        int currentPosition = (int)(right_lift_motor.getCurrentPosition() + left_lift_motor.getCurrentPosition())/2;
+        UpdateLiftPosition();
         int position_of_lower=0;
         int distance_from_lower=0;
         int position_of_upper=0;
@@ -117,8 +115,10 @@ public class Lift {
         }
         MoveToPosition(changedPos);
     }
+    
+    
+    public int UpdateLiftPosition() {
+        currentPosition = (int)(right_lift_motor.getCurrentPosition() + left_lift_motor.getCurrentPosition())/2;
+        return currentPosition;
+    }
 }
-
-
-
-

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
 
+import java.lang.Math;
+
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -30,6 +32,7 @@ public class Motion {
     static final double DRIVE_COUNTS_PER_CM_STRAIGHT = DRIVE_COUNTS_PER_MM_STRAIGHT * 10;
     static final double DRIVE_COUNTS_PER_MM_SIDEWAYS = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM_SIDEWAYS = DRIVE_COUNTS_PER_MM_SIDEWAYS * 10;
+    static final double adjustment = 1.2;
 
     // Initiliase variables
     private Boolean turning = false;
@@ -45,28 +48,28 @@ public class Motion {
         /**
         Use joystick positions to translate to front left motor power for mechanum drive.
         **/
-        return ((jX + jY)/2 - rX /2);
+        return ((-jX + jY)/2 - rX /2);
     }
 
     private float front_right_power(float jY, float jX, float rX) {
         /**
         Use joystick positions to translate to front right motor power for mechanum drive.
         **/
-        return ((jX - jY)/2 + rX /2);
+        return ((-jX - jY)/2 + rX /2);
     }
 
     private float back_left_power(float jY, float jX, float rX) {
         /**
         Use joystick positions to translate to back left motor power for mechanum drive.
         **/
-        return ((jX - jY)/2 - rX /2);
+        return ((-jX - jY)/2 - rX /2);
     }
 
     private float back_right_power(float jY, float jX, float rX) {
         /**
         Use joystick positions to translate to back right motor power for mechanum drive.
         **/
-        return ((jX + jY)/2 + rX /2);
+        return ((-jX + jY)/2 + rX /2);
     }
     
     Motion (DcMotor motor_front_rightN,DcMotor motor_back_leftN, DcMotor motor_front_leftN, DcMotor motor_back_rightN,BNO055IMU imuN) {
@@ -78,13 +81,23 @@ public class Motion {
         this.motor_front_left = motor_front_leftN;
         this.motor_back_right = motor_back_rightN;
         this.imu = imuN;
-
+        
+        motor_front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     
     public void JoystickMoving (float left_x,float right_x,float right_y) {
         /**
         Uses joystick controls to move the robot.
         **/
+        
+        motor_front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor_back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor_front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor_back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        
         if (turning) {
             gap = absolute(getAngle() - target);
             if (gap > 360){gap-=360;}
@@ -118,10 +131,30 @@ public class Motion {
                 turning = false;
             }
         } else {
-        motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, -left_x));
-        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, left_x));
-        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, left_x));;
-        motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, -left_x));
+        motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, left_x));
+        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
+        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
+        motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, left_x));
+        }
+    }
+    
+    private boolean notCloseToTarget(int precision) {
+        /**
+        Checks if encoders are close to target
+        Inputs: precision - the number of encoder drive countrs
+        **/
+        int frontRight = motor_front_right.getTargetPosition()-motor_front_right.getCurrentPosition();
+        int frontLeft = motor_front_left.getTargetPosition()-motor_front_left.getCurrentPosition();
+        int backRight = motor_back_right.getTargetPosition() - motor_back_right.getCurrentPosition();
+        int backLeft = motor_back_left.getTargetPosition() - motor_back_left.getCurrentPosition();
+        
+        int minDistance = Math.min(Math.min(frontRight,frontLeft),Math.min(backRight,backLeft));
+        
+        if ((minDistance > precision) || (minDistance*-1 > precision)) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
     
@@ -136,8 +169,8 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         
         // set target positions when travelling forward (all +)
-        int motor1Target = (int)motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
-        int motor2Target = (int)motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
+        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
         int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
         int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
 
@@ -160,9 +193,9 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
         //Waits until motors finished
-        while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
+        while ((motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy())&& notCloseToTarget(5)){
             try {
-                Thread.sleep(100);   
+                Thread.sleep(100);
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
@@ -187,8 +220,8 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         
         // set target positions when travelling backward
-        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
-        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
+        int motor1Target = (int)((motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
+        int motor2Target = (int)((motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
         int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
         int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
 
@@ -200,8 +233,8 @@ public class Motion {
         
         
         // sets power of motors
-        motor_front_right.setPower(-speed);
-        motor_front_left.setPower(-speed);
+        motor_front_right.setPower(speed);
+        motor_front_left.setPower(speed);
         motor_back_right.setPower(-speed);
         motor_back_left.setPower(-speed);
         
@@ -211,9 +244,9 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
         //Waits until motors finished
-        while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
+        while ((motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy())&& notCloseToTarget(5)){
             try {
-                Thread.sleep(7000);   
+                Thread.sleep(100);
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
@@ -240,8 +273,8 @@ public class Motion {
         // set target positions when driving right (fr -, bl -)
         int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
         int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
-        int motor3Target = (int)(motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
-        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor3Target = (int)(-1* (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor4Target = (int)(1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
@@ -250,10 +283,10 @@ public class Motion {
         motor_back_left.setTargetPosition(motor4Target);
         
         // sets power of motors
-        motor_front_right.setPower(-speed);
-        motor_front_left.setPower(speed);
-        motor_back_right.setPower(speed);
-        motor_back_left.setPower(-speed);
+        motor_front_right.setPower(-speed*adjustment);
+        motor_front_left.setPower(speed*adjustment);
+        motor_back_right.setPower(-speed);
+        motor_back_left.setPower(speed);
                 
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -262,9 +295,9 @@ public class Motion {
         
         
         //Waits until motors finished
-        while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
+        while ((motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy())&& notCloseToTarget(5)){
             try {
-                Thread.sleep(7000);   
+                Thread.sleep(100);
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
@@ -292,8 +325,8 @@ public class Motion {
         // set target positions when driving left (fl -, br -)
         int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
         int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
-        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
-        int motor4Target = (int)(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
+        int motor3Target = (int)(1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor4Target = (int)(-1*(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
@@ -303,10 +336,10 @@ public class Motion {
         
         
         // sets power of motors
-        motor_front_right.setPower(speed);
-        motor_front_left.setPower(-speed);
-        motor_back_right.setPower(-speed);
-        motor_back_left.setPower(speed);
+        motor_front_right.setPower(speed*adjustment);
+        motor_front_left.setPower(-speed*adjustment);
+        motor_back_right.setPower(speed);
+        motor_back_left.setPower(-speed);
 
         // Starts motors
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -316,9 +349,9 @@ public class Motion {
         
         
         //Waits until motors finished
-        while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
+        while ((motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy())&& notCloseToTarget(5)){
             try {
-                Thread.sleep(7000);   
+                Thread.sleep(100);
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
@@ -380,15 +413,17 @@ public class Motion {
         else return;
 
         // set power to rotate.
-        motor_front_right.setPower(rightPower);
-        motor_back_right.setPower(rightPower);
-        motor_front_left.setPower(leftPower);
-        motor_back_left.setPower(leftPower);
-        
+
         motor_front_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_back_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_front_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_back_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motor_front_right.setPower(rightPower*-1);
+        motor_back_right.setPower(rightPower);
+        motor_front_left.setPower(leftPower*-1);
+        motor_back_left.setPower(leftPower);
+               
 
         // rotate until turn is completed.
         double gap = absolute(getAngle() - target);
@@ -399,8 +434,8 @@ public class Motion {
             
             if (gap <=15){
                 double scaleFactor = gap/15;
-                if (scaleFactor*power<0.35){
-                    scaleFactor=0.35/power;
+                if (scaleFactor*power<0.4){
+                    scaleFactor=0.4/power;
                 }
                 
                 if (degrees < 0) {   // turn right.
@@ -412,9 +447,9 @@ public class Motion {
                     rightPower = power*scaleFactor;
                 }
                 
-                motor_front_right.setPower(rightPower);
+                motor_front_right.setPower(rightPower*-1);
                 motor_back_right.setPower(rightPower);
-                motor_front_left.setPower(leftPower);
+                motor_front_left.setPower(leftPower*-1);
                 motor_back_left.setPower(leftPower);
             }
         }
@@ -461,5 +496,15 @@ public class Motion {
         gap = absolute(getAngle() - target);
 
         turning = true;
+
+        while (motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy()){
+            try {
+                Thread.sleep(100);   
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+
     }
 }

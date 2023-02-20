@@ -63,8 +63,10 @@ public class BasicAutonomousTesting extends LinearOpMode {
         //SETUP
         //Initialises all the required variables and objects and initialises them
         //ready for the start();
+        Motion driveTrain;
+        Lift lift;
+        Intake intake;
         
-
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
@@ -96,12 +98,11 @@ public class BasicAutonomousTesting extends LinearOpMode {
         motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-
-        /**
         intake_motor = hardwareMap.get(Servo.class, "intake_servo");
+
         left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
         right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
-        **/
+
         // initialise the directions of the motors
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
         motor_front_left.setDirection(DcMotor.Direction.REVERSE);
@@ -114,11 +115,10 @@ public class BasicAutonomousTesting extends LinearOpMode {
         //colour = hardwareMap.get(ColorSensor.class, "colour");
         //distance = hardwareMap.get(DistanceSensor.class, "colour");
         
-        Motion driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
-        /**
-        Lift lift = new Lift(left_lift_motor,right_lift_motor);
-        Intake intake = new Intake(intake_motor);
-        **/
+        driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
+        lift = new Lift(left_lift_motor,right_lift_motor);
+        intake = new Intake(intake_motor);
+
 
         // set up telemetry to disply on driver station
         telemetry.addData("Status", "Initialized");
@@ -129,9 +129,10 @@ public class BasicAutonomousTesting extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             //Move forwards
-            driveTrain.motorFwdTargetPositions(100,0.5);
-            lift.MoveToPosition(12);
-            intake.pickUpConeAuto();
+            //driveTrain.motorFwdTargetPositions(100,0.5);
+            driveTrain.rotateAuto(90,0.5);
+            lift.MoveToPosition(-300);
+            intake.pickUpCone();
             telemetry.addData("Red",colour.red());
             telemetry.addData("Green",colour.green());
             telemetry.addData("Blue ",colour.blue());

@@ -31,8 +31,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@TeleOp
-
+@TeleOp(name = "Driver Controlled")
 public class DriverControlled extends OpMode {
     /* Declare OpMode members. */
     public DcMotor Motor;
@@ -67,6 +66,8 @@ public class DriverControlled extends OpMode {
         // Create expansion hub
         expansion_Hub_2 = hardwareMap.get(Blinker.class, "Control Hub");
         
+        /**
+        
         // Create gyroscope
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
@@ -88,7 +89,7 @@ public class DriverControlled extends OpMode {
                 ex.printStackTrace();
             }
         }
-            
+        **/
         
         // initialise motors
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
@@ -148,27 +149,7 @@ public class DriverControlled extends OpMode {
         // Standard Mechannum
         drivetrain.JoystickMoving(gamepad1.left_stick_x, gamepad1.right_stick_x,gamepad1.right_stick_y);
         
-        // 90 degree turns
-        if (this.gamepad1.dpad_left) {
-            drivetrain.rotateAuto(90,0.4);
-        }
-        else if (this.gamepad1.dpad_right) {
-            drivetrain.rotateAuto(-90,0.4);
-        }
-        
-        // Lift
-        telemetry.addData("Lift Right",lift.getRightPosition());
-        telemetry.addData("Lift Left",lift.getLeftPosition());
-        telemetry.addData("Lift Target",lift.getTargetPosition());
-        telemetry.addData("Lift Speed",lift.getSpeed());
-        
-        lift.SetMoveSpeed(gamepad2.left_stick_y,gamepad2.right_stick_y);
-        
-        if (gamepad2.dpad_down) {
-            telemetry.addData("Lift Target Name",lift.MoveToPositionString("low"));
-        } else if (gamepad2.dpad_right) {
-            telemetry.addData("Lift Target Name",lift.MoveToPositionString("medium"));
-        }
+        lift.SetMoveSpeed(gamepad2.left_stick_y);
 
         
         // Intake

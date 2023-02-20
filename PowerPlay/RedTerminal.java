@@ -29,9 +29,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "RedSideRedTerminal")
-public class RedSideRedTerminal extends LinearOpMode {
-    public int square = 40;
+@Autonomous(name = "Red Terminal")
+public class RedTerminal extends LinearOpMode {
+    public int square = 60;
     
     public DcMotor Motor;
     // Create objects for this robot
@@ -65,8 +65,28 @@ public class RedSideRedTerminal extends LinearOpMode {
         //SETUP
         //Initialises all the required variables and objects and initialises them
         //ready for the start();
+        Motion driveTrain;
+        Lift lift;
+        Intake intake;
         
+        // initialise object for the dc motor
+        motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
+        motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
+        motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
+        motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
+        intake_motor = hardwareMap.get(Servo.class, "intake_servo");
 
+        left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
+        right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
+
+        // initialise the directions of the motors
+        motor_front_right.setDirection(DcMotor.Direction.FORWARD);
+        motor_front_left.setDirection(DcMotor.Direction.REVERSE);
+        motor_back_right.setDirection(DcMotor.Direction.FORWARD);
+        motor_back_left.setDirection(DcMotor.Direction.REVERSE);
+
+        lift = new Lift(left_lift_motor,right_lift_motor);
+        intake = new Intake(intake_motor);
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
@@ -81,7 +101,11 @@ public class RedSideRedTerminal extends LinearOpMode {
         imu.initialize(parameters);
         telemetry.addData("Mode", "calibrating...");
         telemetry.update();
-
+        
+        driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
+        
+        intake.pickUpConeAuto();
+        
         // make sure the imu gyro is calibrated before continuing.
         while (!isStopRequested() && !imu.isGyroCalibrated()){
             try {
@@ -93,32 +117,6 @@ public class RedSideRedTerminal extends LinearOpMode {
         }
             
         
-        // initialise object for the dc motor
-        motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
-        motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
-        motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
-        motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-
-        left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
-        right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
-
-        // initialise the directions of the motors
-        motor_front_right.setDirection(DcMotor.Direction.FORWARD);
-        motor_front_left.setDirection(DcMotor.Direction.REVERSE);
-        motor_back_right.setDirection(DcMotor.Direction.FORWARD);
-        motor_back_left.setDirection(DcMotor.Direction.REVERSE);
-
-
-        
-        // initialise sensors
-        colour = hardwareMap.get(ColorSensor.class, "colour");
-        distance = hardwareMap.get(DistanceSensor.class, "colour");
-        
-        Motion driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
-        Lift lift = new Lift(left_lift_motor,right_lift_motor);
-        Intake intake = new Intake(intake_motor);
-
-
         // set up telemetry to disply on driver station
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -128,54 +126,83 @@ public class RedSideRedTerminal extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             // Move forwards to sensor
-            driveTrain.motorFwdTargetPositions(70,0.3)
+            lift.MoveToPosition(200);
+            driveTrain.motorFwdTargetPositions(50,0.3);
+            
             // Read sensor
-            double red = colour.red()
-            double green = colour.green()
-            double blue = colour.blue()
-            int position = 0
-
+            /**
+            double red = colour.red();
+            double green = colour.green();
+            double blue = colour.blue();
+            
+            
+            
+            telemetry.addData("Red",red);
+            telemetry.addData("Green",green);
+            telemetry.addData("Blue",blue );
+            
+            **/
+            
+            int position = 2;
+            
+            /**
             if (green > red) {
                 if (green > blue) {
                     // green > blue OR red
-                    position = 1
+                    position = 1;
                 }
                 else {
                     // blue > green > red
-                    position = 3
+                    position = 3;
                 }
             } else {
                 // red > green
                 if (blue > red) {
                     // blue>red>green
-                    position = 3
+                    position = 3;
                 } else {
                     // red > (blue or green)
-                    position = 2
+                    position = 2;
                 }
-
             }
+            **/
+            
+            telemetry.addData("Position",position);
+            telemetry.update();
+            
+            driveTrain.motorFwdTargetPositions(33,0.4);
+            lift.MoveToPosition(390);
+            telemetry.addData("Moving","turn");
+            telemetry.update();
+            driveTrain.rotate(-90,0.7);
+            telemetry.addData("Moving","forward");
+            telemetry.update();
+            //driveTrain.motorFwdTargetPositions(10,1);
+            try {
+                Thread.sleep(4000);
+            }
+            catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
+            intake.putDownConeAuto();
+            telemetry.addData("Moving","backward");
+            telemetry.update();
+            //driveTrain.motorBwdTargetPositions(10,1);
+            //driveTrain.rotate(45,0.7);
+            
+            
             if (position == 1) {
                 // If 1 (leftmost)
-                driveTrain.motorFwdTargetPositions(square,0.4)
-                driveTrain.rotate(-90)
-                lift.MoveToPositionString('medium')
-                intake.putDownConeAuto()
-                driveTrain.motorLftTargetPositions(square/2,0.5)
-                driveTrain.motorBwdTargetPositions(square,0.5)
+                telemetry.addData("Status","Cone dropped");
+                driveTrain.motorRgtTargetPositions(square/2,0.5);
+                driveTrain.motorBwdTargetPositions(square,0.5);
             } else if (position == 2) {
                 // If 2 (middle)
-                driveTrain.motorFwdTargetPositions(square,0.4)
-                driveTrain.rotate(-90)
-                lift.MoveToPositionString('medium')
-                intake.putDownConeAuto()
+                
             } else {
                 // If 3 (rightmost)
-                driveTrain.motorRgtTargetPositions(square,0.4)
-                driveTrain.motorFwdTargetPositions(square*1.5,0.4)
-                driveTrain.rotate(-90)
-                lift.MoveToPositionString('high')
-                intake.putDownConeAuto()
+                driveTrain.motorLftTargetPositions(square/2,0.5);
+                driveTrain.motorFwdTargetPositions(square,0.5);
             }
         }
     }
