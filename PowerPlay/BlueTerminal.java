@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
 
+// Imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -21,7 +22,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -29,6 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
+// Class for the Autonomous from Blue Terminal side
 @Autonomous(name = "Blue Terminal")
 public class BlueTerminal extends LinearOpMode {
     public int square = 60;
@@ -76,15 +77,17 @@ public class BlueTerminal extends LinearOpMode {
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
         intake_motor = hardwareMap.get(Servo.class, "intake_servo");
 
-        left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
-        right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
-
         // initialise the directions of the motors
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
         motor_front_left.setDirection(DcMotor.Direction.REVERSE);
         motor_back_right.setDirection(DcMotor.Direction.FORWARD);
         motor_back_left.setDirection(DcMotor.Direction.REVERSE);
 
+        // initialise objects for lift motors
+        left_lift_motor = hardwareMap.get(DcMotorEx.class, "left_lift_motor");
+        right_lift_motor = hardwareMap.get(DcMotorEx.class, "right_lift_motor");
+
+        // Initialise objects for lift and intake
         lift = new Lift(left_lift_motor,right_lift_motor);
         intake = new Intake(intake_motor);
 
@@ -115,8 +118,7 @@ public class BlueTerminal extends LinearOpMode {
                 ex.printStackTrace();
             }
         }
-            
-        
+
         // set up telemetry to disply on driver station
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -128,19 +130,6 @@ public class BlueTerminal extends LinearOpMode {
             // Move forwards to sensor
             lift.MoveToPosition(200);
             driveTrain.motorFwdTargetPositions(50,0.3);
-            // Read sensor
-            /**
-            double red = colour.red();
-            double green = colour.green();
-            double blue = colour.blue();
-            
-            
-            
-            telemetry.addData("Red",red);
-            telemetry.addData("Green",green);
-            telemetry.addData("Blue",blue );
-            
-            **/
             
             int position = 2;
             
@@ -166,8 +155,12 @@ public class BlueTerminal extends LinearOpMode {
             }
             **/
 
+            // Pretend to read sensor
+
             telemetry.addData("Position",position);
             telemetry.update();
+
+            // Put cone down on high pole
 
             driveTrain.motorFwdTargetPositions(33,0.4);
             lift.MoveToPosition(390);
@@ -177,6 +170,7 @@ public class BlueTerminal extends LinearOpMode {
             telemetry.addData("Moving","forward");
             telemetry.update();
             //driveTrain.motorFwdTargetPositions(10,1);
+
             try {
                 Thread.sleep(4000);
             }
@@ -188,13 +182,14 @@ public class BlueTerminal extends LinearOpMode {
             telemetry.update();
             //driveTrain.motorBwdTargetPositions(10,1);
 
+            // Drive to correct position
             if (position == 1) {
                 // If 1 (leftmost)
                 driveTrain.motorRgtTargetPositions(square/2,0.5);
                 driveTrain.motorFwdTargetPositions(square,0.5);
             } else if (position == 2) {
                 // If 2 (middle)
-                
+                // Already in the right place
             } else {
                 // If 3 (rightmost)
                 driveTrain.motorRgtTargetPositions(square/2,0.5);

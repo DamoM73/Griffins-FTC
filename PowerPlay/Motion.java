@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
 
 import java.lang.Math;
-
+// Imports
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-
+// Class for drivetrain 
 public class Motion {
     // Initialise control hub
     public Blinker expansion_Hub_2;
@@ -98,6 +98,7 @@ public class Motion {
         motor_front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         
+        // Checks for turning 90 degrees
         if (turning) {
             gap = absolute(getAngle() - target);
             if (gap > 360){gap-=360;}
@@ -131,10 +132,11 @@ public class Motion {
                 turning = false;
             }
         } else {
-        motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, left_x));
-        motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
-        motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
-        motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, left_x));
+            // If not turning, use normal mechannum drive formulas
+            motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, left_x));
+            motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
+            motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
+            motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, left_x));
         }
     }
     
@@ -410,7 +412,7 @@ public class Motion {
             leftPower = -power;
             rightPower = power;
         }
-        else return;
+        else return; // at target already
 
         // set power to rotate.
 
@@ -433,6 +435,7 @@ public class Motion {
             if (gap > 360){gap-=360;}
             
             if (gap <=15){
+                // Slow down when close to target
                 double scaleFactor = gap/15;
                 if (scaleFactor*power<0.4){
                     scaleFactor=0.4/power;

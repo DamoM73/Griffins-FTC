@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
-
+// Imports
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.ArrayList;
 
-
+// Class for control of vertical lift
 public class Lift {
+    // Create variables
     public Blinker expansion_Hub_2;
 
     private DcMotor left_lift_motor;
@@ -16,6 +17,7 @@ public class Lift {
     ArrayList<String> StrPos = new ArrayList<String>();
 
     Lift (DcMotor left_lift_motor,DcMotor right_lift_motor) {
+        // Create lift object with all powers
         this.left_lift_motor = left_lift_motor;
         this.right_lift_motor = right_lift_motor;
         left_lift_motor.setDirection(DcMotor.Direction.REVERSE);
@@ -49,6 +51,7 @@ public class Lift {
     }
     
     public void MoveToPosition(int position) {
+        // Starts the motor moving 
         right_lift_motor.setTargetPosition(position);
         left_lift_motor.setTargetPosition(position);
             
@@ -58,6 +61,7 @@ public class Lift {
         right_lift_motor.setPower(0.7);
         left_lift_motor.setPower(0.7);
         
+        // Waits for motors to reach objective
         while (right_lift_motor.isBusy() || left_lift_motor.isBusy()){
             try {
                 Thread.sleep(100);   
@@ -66,7 +70,7 @@ public class Lift {
                 ex.printStackTrace();
             }
         }
-        
+        // Stop motors
         right_lift_motor.setPower(0.2);
         left_lift_motor.setPower(0.2);
         
@@ -118,6 +122,7 @@ public class Lift {
     
     
     public int UpdateLiftPosition() {
+        // Returns the lift position
         currentPosition = (int)(right_lift_motor.getCurrentPosition() + left_lift_motor.getCurrentPosition())/2;
         return currentPosition;
     }

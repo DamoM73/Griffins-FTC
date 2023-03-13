@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
 
+// Imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -31,6 +32,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
+
+// Class for Driver Controlled
 @TeleOp(name = "Driver Controlled")
 public class DriverControlled extends OpMode {
     /* Declare OpMode members. */
@@ -121,7 +124,6 @@ public class DriverControlled extends OpMode {
 
         // Create module references
         drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
-        
         lift = new Lift(left_lift_motor,right_lift_motor);
         intake = new Intake(intake_motor);
         
@@ -136,6 +138,7 @@ public class DriverControlled extends OpMode {
      */
     @Override
     public void start() {
+        // Fun message to drivers
         telemetry.addData("Have Fun","Drivers");
         telemetry.update();
     }
@@ -145,10 +148,12 @@ public class DriverControlled extends OpMode {
      */
     @Override
     public void loop() {
+        // Main loop
         // Movement
         // Standard Mechannum
         drivetrain.JoystickMoving(gamepad1.left_stick_x, gamepad1.right_stick_x,gamepad1.right_stick_y);
         
+        // Move lift
         lift.SetMoveSpeed(gamepad2.left_stick_y);
 
         

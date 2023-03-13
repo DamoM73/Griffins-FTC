@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.compcode.PowerPlay;
-
+// Imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -52,10 +52,12 @@ public class RedTerminal extends LinearOpMode {
     private DistanceSensor distance;
 
     public void addTelemetry(String name, double value) {
+        // Adds data to telemetry on driver hub
         telemetry.addData(name,value);
     }
 
     public void updateTelemetry() {
+        // Updates telemetry to display
         telemetry.update();
     }
 
@@ -102,8 +104,10 @@ public class RedTerminal extends LinearOpMode {
         telemetry.addData("Mode", "calibrating...");
         telemetry.update();
         
+        // Intiialise drive chain
         driveTrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
         
+        // Pick up preload cone
         intake.pickUpConeAuto();
         
         // make sure the imu gyro is calibrated before continuing.
@@ -129,23 +133,12 @@ public class RedTerminal extends LinearOpMode {
             lift.MoveToPosition(200);
             driveTrain.motorFwdTargetPositions(50,0.3);
             
-            // Read sensor
-            /**
-            double red = colour.red();
-            double green = colour.green();
-            double blue = colour.blue();
-            
-            
-            
-            telemetry.addData("Red",red);
-            telemetry.addData("Green",green);
-            telemetry.addData("Blue",blue );
-            
-            **/
+            // Pretend to read sensor
             
             int position = 2;
             
             /**
+            // Code to analyse sensor reading if we had sensor
             if (green > red) {
                 if (green > blue) {
                     // green > blue OR red
@@ -170,6 +163,7 @@ public class RedTerminal extends LinearOpMode {
             telemetry.addData("Position",position);
             telemetry.update();
             
+            // Move to high pole
             driveTrain.motorFwdTargetPositions(33,0.4);
             lift.MoveToPosition(390);
             telemetry.addData("Moving","turn");
@@ -177,20 +171,20 @@ public class RedTerminal extends LinearOpMode {
             driveTrain.rotate(-90,0.7);
             telemetry.addData("Moving","forward");
             telemetry.update();
-            //driveTrain.motorFwdTargetPositions(10,1);
+            
             try {
                 Thread.sleep(4000);
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
             }
+
+            // Put down cone
             intake.putDownConeAuto();
             telemetry.addData("Moving","backward");
             telemetry.update();
-            //driveTrain.motorBwdTargetPositions(10,1);
-            //driveTrain.rotate(45,0.7);
             
-            
+            // Move to correct position
             if (position == 1) {
                 // If 1 (leftmost)
                 telemetry.addData("Status","Cone dropped");
@@ -198,7 +192,7 @@ public class RedTerminal extends LinearOpMode {
                 driveTrain.motorBwdTargetPositions(square,0.5);
             } else if (position == 2) {
                 // If 2 (middle)
-                
+                // Already in the right place
             } else {
                 // If 3 (rightmost)
                 driveTrain.motorLftTargetPositions(square/2,0.5);
