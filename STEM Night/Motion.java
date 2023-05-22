@@ -137,27 +137,35 @@ public class Motion {
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         
+        int motorFrontRightOriginal = (int)motor_front_right.getCurrentPosition();
+        int motorFrontLeftOriginal = (int)motor_front_left.getCurrentPosition();
+        int motorBackRightOriginal = (int)motor_back_right.getCurrentPosition();
+        int motorBackLeftOriginal = (int)motor_back_left.getCurrentPosition();
+        
+        
         // set target positions when travelling forward (all +)
-        int motorFrontRightTarget = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
-        int motorFrontLeftTarget = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
-        int motorBackRightTarget = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
-        int motorBackLeftTarget = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motorFrontRightTargetUltimate = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
+        int motorFrontLeftTargetUltimate = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
+        int motorBackRightTargetUltimate = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motorBackLeftTargetUltimate = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+
+        double progress = 0;
 
         // set motors to drive to position.
-        motor_front_right.setTargetPosition(motorFrontRightTarget);
-        motor_front_left.setTargetPosition(motorFrontLeftTarget);
-        motor_back_right.setTargetPosition(motorBackRightTarget);
-        motor_back_left.setTargetPosition(motorBackLeftTarget);
+        motor_front_right.setTargetPosition(((double)(motorFrontRightTargetUltimate - motorFrontRightOriginal))*progress+(double)motorFrontRightOriginal);
+        motor_front_left.setTargetPosition((motorFrontLeftTargetUltimate - motorFrontLefttOriginal)*progress+(double)motorFrontLeftOriginal);
+        motor_back_right.setTargetPosition((motorBackRightTargetUltimate - motorBackRightOriginal)*progress+(double)motorBackRightOriginal);
+        motor_back_left.setTargetPosition((motorBackLeftTargetUltimate - motorBackLefttOriginal)*progress+(double)motorBackLeftOriginal);
         
         double frontRightSpeed = speed;
         double frontLeftSpeed = speed;
         double backRightSpeed = speed;
         double backLeftSpeed = speed;
 
-        motor_front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor_front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor_back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor_back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor_back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor_back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // sets power of motors
         motor_front_right.setPower(frontRightSpeed);
@@ -166,13 +174,12 @@ public class Motion {
         motor_back_left.setPower(backLeftSpeed);
         
         //Waits until motors finished
-        while ((motor_front_left.isBusy() || motor_front_right.isBusy() || motor_back_left.isBusy() || motor_back_right.isBusy())&& notCloseToTarget(5)){
-            try {
-                Thread.sleep(100);
-            }
-            catch(InterruptedException ex){
-                ex.printStackTrace();
-            }
+        while (progress != 1){
+            motor_front_right.setTargetPosition((motorFrontRightTargetUltimate - motorFrontRightOriginal)*progress+motorFrontRightOriginal);
+            motor_front_left.setTargetPosition((motorFrontLeftTargetUltimate - motorFrontLefttOriginal)*progress+motorFrontLeftOriginal);
+            motor_back_right.setTargetPosition((motorBackRightTargetUltimate - motorBackRightOriginal)*progress+motorBackRightOriginal);
+            motor_back_left.setTargetPosition((motorBackLeftTargetUltimate - motorBackLefttOriginal)*progress+motorBackLeftOriginal);
+            progress += 0.001;
         }
 
         // stops motors
