@@ -27,8 +27,9 @@ public class Motion {
     // convert count per revolution to counts per cm 
     static final double HD_COUNTS_PER_REV = 28;
     static final double DRIVE_GEAR_REDUCTION = ((1+(46/11))*(1+(46/11)));
+    static final double DRIVE_COUNTS_PER_REVOLUTION = 539;
     static final double WHEEL_CIRCUMFERENCE_MM = 100 * Math.PI;
-    static final double DRIVE_COUNTS_PER_MM_STRAIGHT = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM/1.2682;
+    static final double DRIVE_COUNTS_PER_MM_STRAIGHT = DRIVE_COUNTS_PER_REVOLUTION/WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM_STRAIGHT = DRIVE_COUNTS_PER_MM_STRAIGHT * 10;
     static final double DRIVE_COUNTS_PER_MM_SIDEWAYS = (HD_COUNTS_PER_REV * DRIVE_GEAR_REDUCTION) / WHEEL_CIRCUMFERENCE_MM;
     static final double DRIVE_COUNTS_PER_CM_SIDEWAYS = DRIVE_COUNTS_PER_MM_SIDEWAYS * 10;
@@ -127,20 +128,17 @@ public class Motion {
         }
     }
     
-    public void motorFwdTargetPositions (float cmDistance, double speed) {
+    public void motorFwdTargetPositions (float cmDistance, double cmPerCount) {
         /**
         Calculates motor encoder values and applies them for moving forward
         Inputs: distance, speed
         **/
+        double progressIncrement = cmPerCount/cmDistance;
+
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        
-        int motorFrontRightOriginal = (int)motor_front_right.getCurrentPosition();
-        int motorFrontLeftOriginal = (int)motor_front_left.getCurrentPosition();
-        int motorBackRightOriginal = (int)motor_back_right.getCurrentPosition();
-        int motorBackLeftOriginal = (int)motor_back_left.getCurrentPosition();
         
         
         // set target positions when travelling forward (all +)
@@ -152,15 +150,10 @@ public class Motion {
         double progress = 0;
 
         // set motors to drive to position.
-        motor_front_right.setTargetPosition(((double)(motorFrontRightTargetUltimate - motorFrontRightOriginal))*progress+(double)motorFrontRightOriginal);
-        motor_front_left.setTargetPosition((motorFrontLeftTargetUltimate - motorFrontLefttOriginal)*progress+(double)motorFrontLeftOriginal);
-        motor_back_right.setTargetPosition((motorBackRightTargetUltimate - motorBackRightOriginal)*progress+(double)motorBackRightOriginal);
-        motor_back_left.setTargetPosition((motorBackLeftTargetUltimate - motorBackLefttOriginal)*progress+(double)motorBackLeftOriginal);
-        
-        double frontRightSpeed = speed;
-        double frontLeftSpeed = speed;
-        double backRightSpeed = speed;
-        double backLeftSpeed = speed;
+        double frontRightSpeed = 1;
+        double frontLeftSpeed = 1;
+        double backRightSpeed = 1;
+        double backLeftSpeed = 1;
 
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -174,12 +167,12 @@ public class Motion {
         motor_back_left.setPower(backLeftSpeed);
         
         //Waits until motors finished
-        while (progress != 1){
-            motor_front_right.setTargetPosition((motorFrontRightTargetUltimate - motorFrontRightOriginal)*progress+motorFrontRightOriginal);
-            motor_front_left.setTargetPosition((motorFrontLeftTargetUltimate - motorFrontLefttOriginal)*progress+motorFrontLeftOriginal);
-            motor_back_right.setTargetPosition((motorBackRightTargetUltimate - motorBackRightOriginal)*progress+motorBackRightOriginal);
-            motor_back_left.setTargetPosition((motorBackLeftTargetUltimate - motorBackLefttOriginal)*progress+motorBackLeftOriginal);
-            progress += 0.001;
+        while (progress < 1){
+            motor_front_right.setTargetPosition((int)(motorFrontRightTargetUltimate*progress));
+            motor_front_left.setTargetPosition((int)(motorFrontLeftTargetUltimate*progress));
+            motor_back_right.setTargetPosition((int)(motorBackRightTargetUltimate*progress));
+            motor_back_left.setTargetPosition((int)((motorBackLeftTargetUltimate)*progress));
+            progress += progressIncrement;
         }
 
         // stops motors
