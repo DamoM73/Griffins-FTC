@@ -110,7 +110,9 @@ public class DriverControlled extends OpMode {
         // initialise the directions of the motors
         /**
         motor_front_right.setDirection(DcMotor.Direction.FORWARD);
-        motor_front_left.setDirection(DcMotor.Direction.REVERSE);
+        motor_front_left.setDirection( 
+            
+        );
         motor_back_right.setDirection(DcMotor.Direction.FORWARD);
         motor_back_left.setDirection(DcMotor.Direction.REVERSE);
         **/
