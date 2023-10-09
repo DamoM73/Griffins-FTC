@@ -11,6 +11,84 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
+class PIDController {
+    private double kp, ki, kd;
+    private double prevError = 0;
+    private double integral = 0;
+    
+    public PIDController(double kp, double ki, double kd) {
+        this.kp = kp;
+        this.ki = ki;
+        this.kd = kd;
+    }
+    
+    public double calculate(double setpoint, double currentValue) {
+        double error = setpoint - currentValue;
+        integral += error;
+        double derivative = error - prevError;
+        
+        double output = kp * error + ki * integral + kd * derivative;
+        prevError = error;
+        
+        return output;
+    }
+}
+
+class MecanumDrive {
+    public PIDController pidX, pidY, pidRotation;
+    public boolean moving;
+    private double targetX,targetY,targetRotation, currentX, currentY, currentRotation, outputX, outputY, outputRotation;
+    public MecanumDrive() {
+        // Initialize motors and sensors here
+        this.pidX = new PIDController(1.0, 0.0, 0.0);
+        this.targetX = 0.0;
+        this.targetY = 0.0;
+        this.pidY = new PIDController(1.0, 0.0, 0.0);
+        this.pidRotation = new PIDController(1.0, 0.0, 0.0);
+        this.moving = false;
+    }
+
+    public boolean stillMoving() {
+        if (-0.5<(outputY-currentY) & (outputY-currentY)<0.5){
+            if (-0.5<(outputX-currentX) & (outputX-currentX)<0.5){
+                if (-0.5<(targetRotation-currentRotation) & (targetRotation-currentRotation)<0.5){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public double xChange(double currentX){
+        outputX = pidX.calculate(targetX, currentX);
+        this.currentX = currentX;
+        return outputX;
+    }
+
+
+
+    public double yChange(double currentY) {
+        outputY = pidY.calculate(targetY, currentY);
+        this.currentY = currentY;
+        return outputY;
+    }
+
+    public double rotationChange(double currentRotation) {
+        outputRotation = pidRotation.calculate(targetRotation, currentRotation);
+        this.currentRotation = currentRotation;
+        return outputRotation;
+    }
+    
+    public void driveToPosition(double targetX, double targetY, double targetRotation) {
+        // Get current robot position and orientation
+        moving = true;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetRotation = targetRotation;
+        this.outputX = 10923814.0;
+    }
+}
+
 // Class for drivetrain 
 public class Motion {
     // Initialise control hub
@@ -23,6 +101,8 @@ public class Motion {
     public DcMotor motor_back_right;
     public DcMotor motor_front_left;
     public DcMotor motor_back_left;
+
+    MecanumDrive pidController;
     
     // convert count per revolution to counts per cm 
     static final double HD_COUNTS_PER_REV = 28;
@@ -45,28 +125,28 @@ public class Motion {
     private int degrees;
 
 
-    private float front_left_power(float jY, float jX, float rX) {
+    private double front_left_power(double jY, double jX, double rX) {
         /**
         Use joystick positions to translate to front left motor power for mechanum drive.
         **/
         return ((-jX + jY)/2 - rX /2);
     }
 
-    private float front_right_power(float jY, float jX, float rX) {
+    private double front_right_power(double jY, double jX, double rX) {
         /**
         Use joystick positions to translate to front right motor power for mechanum drive.
         **/
         return ((-jX - jY)/2 + rX /2);
     }
 
-    private float back_left_power(float jY, float jX, float rX) {
+    private double back_left_power(double jY, double jX, double rX) {
         /**
         Use joystick positions to translate to back left motor power for mechanum drive.
         **/
         return ((-jX - jY)/2 - rX /2);
     }
 
-    private float back_right_power(float jY, float jX, float rX) {
+    private double back_right_power(double jY, double jX, double rX) {
         /**
         Use joystick positions to translate to back right motor power for mechanum drive.
         **/
@@ -82,6 +162,8 @@ public class Motion {
         this.motor_front_left = motor_front_leftN;
         this.motor_back_right = motor_back_rightN;
         this.imu = imuN;
+
+        pidController = new MecanumDrive();
         
         motor_front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor_back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -128,32 +210,43 @@ public class Motion {
         }
     }
     
-    public void motorFwdTargetPositions (float cmDistance, double cmPerCount) {
-        /**
+    /** public double motorFwdTargetPositions (float cmDistance, double cmPerCount) {
+        
         Calculates motor encoder values and applies them for moving forward
         Inputs: distance, speed
-        **/
+        
         double progressIncrement = cmPerCount/cmDistance;
 
         motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
+
+        motor_front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor_back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         
         
         // set target positions when travelling forward (all +)
-        int motorFrontRightTargetUltimate = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
-        int motorFrontLeftTargetUltimate = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
-        int motorBackRightTargetUltimate = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
-        int motorBackLeftTargetUltimate = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motorFrontRightTargetUltimate = (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)*-1;
+        int motorFrontLeftTargetUltimate = (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motorBackRightTargetUltimate = (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motorBackLeftTargetUltimate = (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)*-1;
 
         double progress = 0;
 
         // set motors to drive to position.
-        double frontRightSpeed = 1;
-        double frontLeftSpeed = 1;
-        double backRightSpeed = 1;
-        double backLeftSpeed = 1;
+        double frontRightSpeed = 0.2;
+        double frontLeftSpeed = 0.2;
+        double backRightSpeed = 0.2;
+        double backLeftSpeed = 0.2;
+
+        motor_front_right.setTargetPosition(1);
+        motor_front_left.setTargetPosition(1);
+        motor_back_right.setTargetPosition(1);
+        motor_back_left.setTargetPosition(1);
+
 
         motor_front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor_front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -171,7 +264,7 @@ public class Motion {
             motor_front_right.setTargetPosition((int)(motorFrontRightTargetUltimate*progress));
             motor_front_left.setTargetPosition((int)(motorFrontLeftTargetUltimate*progress));
             motor_back_right.setTargetPosition((int)(motorBackRightTargetUltimate*progress));
-            motor_back_left.setTargetPosition((int)((motorBackLeftTargetUltimate)*progress));
+            motor_back_left.setTargetPosition((int)(motorBackLeftTargetUltimate*progress));
             progress += progressIncrement;
         }
 
@@ -180,6 +273,31 @@ public class Motion {
         motor_back_right.setPower(0);
         motor_front_left.setPower(0);
         motor_back_left.setPower(0);
+    }
+    **/
+
+    public double motorFwdTargetPositions (float cmDistance, double cmPerCount) {
+
+        pidController.driveToPosition(0,cmDistance/cmPerCount,0);
+
+        motor_front_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        motor_front_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        motor_back_right.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
+
+        while (pidController.stillMoving()) {
+            double xChange = pidController.xChange(0.0);
+            double yChange = pidController.yChange(0.0);
+            double rotationChange = pidController.rotationChange(0.0);
+
+            motor_front_right.setPower(front_right_power(yChange,xChange,rotationChange));
+            motor_front_left.setPower(front_left_power(yChange,xChange,rotationChange));
+            motor_back_right.setPower(back_right_power(yChange,xChange,rotationChange));
+            motor_back_left.setPower(back_left_power(yChange,xChange,rotationChange));
+        }
+
+        return 0.0;
+
     }
     
     public void motorBwdTargetPositions (float cmDistance, double speed) {
