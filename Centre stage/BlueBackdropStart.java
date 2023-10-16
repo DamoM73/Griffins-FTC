@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Red Audience")
-public class RedAudienceStart extends LinearOpMode {
+@Autonomous(name = "Blue Backdrop")
+public class BlueBackdropStart extends LinearOpMode {
     public int square = 60;
     
     public DcMotor Motor;
@@ -61,7 +61,7 @@ public class RedAudienceStart extends LinearOpMode {
         //ready for the start();
         Motion driveTrain;
         Lift lift;
-        Intake intake;
+        IntakeOuttake intake;
         
         // initialise object for the dc motor
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
@@ -75,7 +75,7 @@ public class RedAudienceStart extends LinearOpMode {
         rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
 
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
-        intake = new Intake(leftIntakeServo, rightIntakeServo);
+        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
@@ -114,7 +114,7 @@ public class RedAudienceStart extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             driveTrain.motorFwdTargetPositions(60,0.5);
-            centralPixelDistance = distance.getDistance(DistanceUnit.CM);
+            float centralPixelDistance = distance.getDistance(DistanceUnit.CM);
             if (centralPixelDistance > 20){
                 //Pixel in centre
                 driveTrain.motorLftTargetPositions(10,0.5);
@@ -130,8 +130,8 @@ public class RedAudienceStart extends LinearOpMode {
             else{
                 driveTrain.rotate(90,0.5);
                 driveTrain.motorLftTargetPositions(15,0.5);
-                centralPixelDistance = distance.getDistance(DistanceUnit.CM);
-                if(distance < 20){
+                float leftPixelDistance = distance.getDistance(DistanceUnit.CM);
+                if(leftPixelDistance < 20){
                     driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
                     lift.pickUpPosition();
                     intake.outakeAutoLeft();

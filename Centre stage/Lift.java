@@ -2,6 +2,7 @@ package org.firstinspires.ftc.compcode.CentreStage;
 // Imports
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import java.util.ArrayList;
 
 // Class for control of vertical lift

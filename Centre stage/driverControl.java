@@ -35,7 +35,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 // Class for Driver Controlled
 @TeleOp(name = "Driver Controlled")
-public class DriverControlled extends OpMode {
+public class DriverControl extends OpMode {
+    public BNO055IMU imu;
     public DcMotor motor_front_right;
     public DcMotor motor_back_right;
     public DcMotor motor_front_left;
@@ -53,12 +54,11 @@ public class DriverControlled extends OpMode {
     // Initialise interfaces with other modules
     Motion drivetrain;
     Lift lift;
-    Intake intake;
+    IntakeOuttake intake;
 
     @Override
     public void init() {
         // Create expansion hub
-        expansion_Hub_2 = hardwareMap.get(Blinker.class, "Control Hub");
         
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
         motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
@@ -72,7 +72,7 @@ public class DriverControlled extends OpMode {
 
         // Create module references
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
-        intake = new Intake(leftIntakeServo, rightIntakeServo);
+        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
         drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
         
 
@@ -102,7 +102,7 @@ public class DriverControlled extends OpMode {
         drivetrain.JoystickMoving(gamepad1.left_stick_x, gamepad1.right_stick_x,gamepad1.right_stick_y);
         
         // Move arm
-        lift.rotateArm(gamepad2.r_stick_y);
+        lift.rotateArm(gamepad2.right_stick_y);
         lift.extendArm(gamepad2.left_trigger-gamepad2.right_trigger);
 
         // wrist

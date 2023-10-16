@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Red Audience")
-public class RedAudienceStart extends LinearOpMode {
+@Autonomous(name = "Red Backdrop")
+public class RedBackdropStart extends LinearOpMode {
     public int square = 60;
     
     public DcMotor Motor;
@@ -61,7 +61,7 @@ public class RedAudienceStart extends LinearOpMode {
         //ready for the start();
         Motion driveTrain;
         Lift lift;
-        Intake intake;
+        IntakeOuttake intake;
         
         // initialise object for the dc motor
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
@@ -75,7 +75,7 @@ public class RedAudienceStart extends LinearOpMode {
         rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
 
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
-        intake = new Intake(leftIntakeServo, rightIntakeServo);
+        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
