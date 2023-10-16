@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import Thread
+import Thread;
 
 public class IntakeOuttake {
 
@@ -37,7 +37,7 @@ public class IntakeOuttake {
         leftIntakeOuttake.setPosition(0);
     }
 
-    public void OutakeLeftAuto(){
+    public void outakeLeftAuto(){
         leftIntakeOuttake.setPosition(-1);
         try {
             Thread.sleep(5000);
@@ -47,7 +47,7 @@ public class IntakeOuttake {
         leftIntakeOuttake.setPosition(0);
     }
 
-    public void OutakeRightAuto(){
+    public void outakeRightAuto(){
         rightIntakeOuttake.setPosition(-1);
         try {
             Thread.sleep(5000);
@@ -57,15 +57,15 @@ public class IntakeOuttake {
         rightIntakeOuttake.setPosition(0);
     }
 
-    public void OutakeLeft(){
+    public void outakeLeft(){
         leftIntakeOuttake.setPosition(-1);
     }
 
-    public void OutakeRight(){
+    public void outakeRight(){
         rightIntakeOuttake.setPosition(-1);
     }
 
-    public void StopIntakeOuttake(){
+    public void stopIntakeOuttake(){
         rightIntakeOuttake.setPosition(0);
         leftIntakeOuttake.setPosition(0);
     }
