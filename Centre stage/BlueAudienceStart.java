@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Red Audience")
-public class RedAudienceStart extends LinearOpMode {
+@Autonomous(name = "Blue Audience")
+public class BlueAudienceStart extends LinearOpMode {
     public int square = 60;
     
     public DcMotor Motor;
@@ -124,12 +124,12 @@ public class RedAudienceStart extends LinearOpMode {
                 driveTrain.rotate(180);
                 lift.compact();
                 driveTrain.motorFwdTargetPositions(60,0.4);
-                driveTrain.rotate(90);
+                driveTrain.rotate(-90);
                 driveTrain.motorFwdTargetPositions(180,0.4);
-                driveTrain.rotate(90);
+                driveTrain.rotate(-90);
                 lift.moveToBasePosition();
                 driveTrain.motorFwdTargetPositions(60,0.4);
-                driveTrain.rotate(-90);
+                driveTrain.rotate(90);
                 driveTrain.motorFwdTargetPositions(20,0.2);
                 intake.outakeAutoRight();
             }
@@ -145,16 +145,17 @@ public class RedAudienceStart extends LinearOpMode {
                     driveTrain.rotate(90);
                     lift.compact();
                     driveTrain.motorFwdTargetPositions(60,0.4);
-                    driveTrain.rotate(90);
-                    driveTrain.motorFwdTargetPositions(180,0.4);
-                    driveTrain.rotate(90);
-                    lift.moveToBasePosition();
-                    driveTrain.motorFwdTargetPositions(70,0.4);
                     driveTrain.rotate(-90);
+                    driveTrain.motorFwdTargetPositions(180,0.4);
+                    driveTrain.rotate(-90);
+                    lift.moveToBasePosition();
+                    driveTrain.motorFwdTargetPositions(50,0.4);
+                    driveTrain.rotate(90);
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     intake.outakeAutoRight();
                 }
                 else {
+                    // On right
                     driveTrain.rotate(180);
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     lift.pickUpPosition();
@@ -163,12 +164,12 @@ public class RedAudienceStart extends LinearOpMode {
                     driveTrain.rotate(-90);
                     lift.compact();
                     driveTrain.motorFwdTargetPositions(60,0.4);
-                    driveTrain.rotate(90);
-                    driveTrain.motorFwdTargetPositions(180,0.4);
-                    driveTrain.rotate(90);
-                    lift.moveToBasePosition();
-                    driveTrain.motorFwdTargetPositions(50,0.4);
                     driveTrain.rotate(-90);
+                    driveTrain.motorFwdTargetPositions(180,0.4);
+                    driveTrain.rotate(-90);
+                    lift.moveToBasePosition();
+                    driveTrain.motorFwdTargetPositions(70,0.4);
+                    driveTrain.rotate(90);
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     intake.outakeAutoRight();
                 }
