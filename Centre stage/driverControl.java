@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.compcode.PowerPlay;
+package org.firstinspires.ftc.compcode.CentreStage;
 
 // Imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -127,7 +127,7 @@ public class DriverControlled extends OpMode {
         else {
             intake.stopIntakeOuttake()
         }
-        
+
         telemetry.update();
     }
 }
