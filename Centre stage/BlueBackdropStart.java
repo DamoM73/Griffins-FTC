@@ -143,12 +143,12 @@ public class RedAudienceStart extends LinearOpMode {
                     driveTrain.motorLftTargetPositions(60,0.5);
                 }
                 else{
-                    driveTrain.rotate(180,0.5)
+                    driveTrain.rotate(180,0.5);
                     driveTrain.motorFwdTargetPositions(30,0.5);
                     lift.pickUpPosition();
                     intake.outakeAutoLeft();
                     driveTrain.motorBwdTargetPositions(20,0.5);
-                    lift.compact()
+                    lift.compact();
                     driveTrain.motorLftTargetPositions(60,0.5);
                     driveTrain.motorFwdTargetPositions(60,0.5);
                     driveTrain.motorRgtTargetPositions(60,0.5);
@@ -157,3 +157,5 @@ public class RedAudienceStart extends LinearOpMode {
                 }
             }
         }
+    }
+}

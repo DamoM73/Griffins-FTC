@@ -116,16 +116,16 @@ public class DriverControlled extends OpMode {
         }
 
         if (gamepad2.x){
-            intake.outakeLeft()
+            intake.outakeLeft();
         }
         else if (gamepad2.b){
-            intake.outakeRight()
+            intake.outakeRight();
         }
         else if (gamepad2.a) {
-            intake.intake()
+            intake.intake();
         } 
         else {
-            intake.stopIntakeOuttake()
+            intake.stopIntakeOuttake();
         }
 
         telemetry.update();
