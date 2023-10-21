@@ -13,6 +13,7 @@ public class Lift {
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
     private Servo wristServo;
+    private float wristPosition;
 
     Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo) {
         // Create lift object with all powers
@@ -51,12 +52,13 @@ public class Lift {
     }
 
     public void rotateWrist(double speed) {
-        if (-0.1 < speed && speed < 0.1) {
-            wristServo.setPower(0);
-        }
-        else {
-            wristServo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            wristServo.setPower(speed);
+        if (-0.1 > speed || speed > 0.1) {
+            ///????? IDK, it is a servo which means you cnat use set power and stuff so i am seeing if this works, it gets the position and then modifys it so it can rotate or maybe it is a contin
+            //wristServo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //wristServo.setPower(speed);
+            wristPosition += speed/3;
+            wristServo.setPosition(wristPosition);
+            
         }
     }
 

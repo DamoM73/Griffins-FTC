@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.compcode.CentreStage;
 
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -19,6 +20,7 @@ public class IntakeOuttake {
         this.rightIntakeOuttake = rightIntakeOuttake;
         this.leftIntakeOuttake = leftIntakeOuttake;
     }  
+
 
     public void intake(){
         rightIntakeOuttake.setPosition(1);
@@ -56,7 +58,7 @@ public class IntakeOuttake {
         }
         rightIntakeOuttake.setPosition(0);
     }
-
+    
     public void outakeLeft(){
         leftIntakeOuttake.setPosition(-1);
     }
