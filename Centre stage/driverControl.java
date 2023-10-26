@@ -33,8 +33,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 
-// Class for Driver Controlled
-@TeleOp(name = "Driver Controlled")
+// Class for Driver Control
+//Harry why was it Driver Controlled before in the teleop?? also the script was called driverControl
+// note from alex - gfd harry
+@TeleOp(name = "Driver Control")
 public class DriverControl extends OpMode {
     public BNO055IMU imu;
     public DcMotor motor_front_right;
@@ -66,13 +68,14 @@ public class DriverControl extends OpMode {
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
         liftRotateMotor = hardwareMap.get(DcMotorEx.class, "lift_rotate_motor");
         liftExtendMotor = hardwareMap.get(DcMotorEx.class, "right_extend_motor");
+        //seems like this could get confused easily it should be something better like wrist_servo
         wristServo = hardwareMap.get(Servo.class, "intake_servo");
-        leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
-        rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
+        // leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
+        // rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
 
         // Create module references
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
-        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
+        // intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
         drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
         
 
@@ -86,8 +89,8 @@ public class DriverControl extends OpMode {
      */
     @Override
     public void start() {
-        // Fun message to drivers
-        telemetry.addData("Have Fun","Drivers");
+        // Fun message to drivers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        telemetry.addData("This robot is demon spawn");
         telemetry.update();
     }
 
@@ -96,6 +99,9 @@ public class DriverControl extends OpMode {
      */
     @Override
     public void loop() {
+        String s=String.valueOf(gamepad1.left_stick_x);
+        telemetry.addData("left-stick",s);
+        telemetry.update();
         // Main loop
         // Movement
         // Standard Mechannum
@@ -107,26 +113,26 @@ public class DriverControl extends OpMode {
 
         // wrist
         if (gamepad2.right_bumper) {
-            lift.rotateWrist(0.4);
+            lift.rotateWrist(1/72);
         }
         else if (gamepad2.left_bumper) {
-            lift.rotateWrist(-0.4);
+            lift.rotateWrist(1/72*-1);
         } else {
             lift.rotateWrist(0);
         }
 
-        if (gamepad2.x){
-            intake.outakeLeft();
-        }
-        else if (gamepad2.b){
-            intake.outakeRight();
-        }
-        else if (gamepad2.a) {
-            intake.intake();
-        } 
-        else {
-            intake.stopIntakeOuttake();
-        }
+        // if (gamepad2.x){
+        //     intake.outakeLeft();
+        // }
+        // else if (gamepad2.b){
+        //     intake.outakeRight();
+        // }
+        // else if (gamepad2.a) {
+        //     intake.intake();
+        // } 
+        // else {
+        //     intake.stopIntakeOuttake();
+        // }
 
         telemetry.update();
     }
