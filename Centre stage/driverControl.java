@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 //Harry why was it Driver Controlled before in the teleop?? also the script was called driverControl
 // note from alex - gfd harry
 @TeleOp(name = "Driver Control")
-public class DriverControl extends OpMode {
+public class driverControl extends OpMode {
     public BNO055IMU imu;
     public DcMotor motor_front_right;
     public DcMotor motor_back_right;
@@ -90,7 +90,7 @@ public class DriverControl extends OpMode {
     @Override
     public void start() {
         // Fun message to drivers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        telemetry.addData("This robot is demon spawn");
+        telemetry.addData("Have Fun","Drivers");
         telemetry.update();
     }
 

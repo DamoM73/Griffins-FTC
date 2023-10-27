@@ -14,6 +14,19 @@ public class Lift {
     private DcMotor liftExtendMotor;
     private Servo wristServo;
     private float wristPosition;
+    private double armExtendModifier = 0.5;
+    private double wristSpeedModifier = 0.05;
+    private double wristPickupAngle = 0.5;
+    private int liftPickupExtend = 0;
+    private int armPickupAngle = -200;
+
+    private float wristBaseAngle = 1;
+    private int liftBaseExtend = 0;
+    private int armBaseAngle = -50;
+
+    private float wristCompactAngle = 0;
+    private int liftCompactExtend = 0;
+    private int armCompactAngle = 0;
 
     Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo) {
         // Create lift object with all powers
@@ -37,7 +50,7 @@ public class Lift {
         }
         else {
             liftExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            liftExtendMotor.setPower(speed*0.5);
+            liftExtendMotor.setPower(speed*armExtendModifier);
         }
     }
 
@@ -57,16 +70,14 @@ public class Lift {
         //wristServo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //wristServo.setPower(speed);
 
-        wristServo.setPosition(Range.clip(wristServo.getPosition() + speed,0,1));
-            
-        
+        wristServo.setPosition(wristServo.getPosition() + speed*wristSpeedModifier);
     }
 
     public void pickUpPosition() {
         /**Move to pick up Position */
-        wristServo.setPosition(350);
-        liftExtendMotor.setTargetPosition(0);
-        liftRotateMotor.setTargetPosition(-200);
+        wristServo.setPosition(wristPickupAngle);
+        liftExtendMotor.setTargetPosition(liftPickupExtend);
+        liftRotateMotor.setTargetPosition(armPickupAngle);
         liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setPower(1);
@@ -81,9 +92,9 @@ public class Lift {
 
     public void moveToBasePosition(){
         /**Move to position to place on bottom position */
-        wristServo.setPosition(100);
-        liftExtendMotor.setTargetPosition(0);
-        liftRotateMotor.setTargetPosition(-50);
+        wristServo.setPosition(wristBaseAngle);
+        liftExtendMotor.setTargetPosition(liftBaseExtend);
+        liftRotateMotor.setTargetPosition(armBaseAngle);
         liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setPower(1);
@@ -98,9 +109,9 @@ public class Lift {
 
     public void compact() {
         /**Move to compacted position */
-        wristServo.setPosition(360);
-        liftExtendMotor.setTargetPosition(0);
-        liftRotateMotor.setTargetPosition(0);
+        wristServo.setPosition(wristCompactAngle);
+        liftExtendMotor.setTargetPosition(liftCompactExtend);
+        liftRotateMotor.setTargetPosition(armCompactAngle);
         liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setPower(1);
