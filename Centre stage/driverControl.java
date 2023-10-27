@@ -113,10 +113,10 @@ public class driverControl extends OpMode {
 
         // wrist
         if (gamepad2.right_bumper) {
-            lift.rotateWrist(1/72);
+            lift.rotateWrist(1);
         }
         else if (gamepad2.left_bumper) {
-            lift.rotateWrist(1/72*-1);
+            lift.rotateWrist(-1);
         } else {
             lift.rotateWrist(0);
         }
