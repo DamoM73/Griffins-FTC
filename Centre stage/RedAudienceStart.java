@@ -73,6 +73,7 @@ public class RedAudienceStart extends LinearOpMode {
         wristServo = hardwareMap.get(Servo.class, "intake_servo");
         leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
         rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
+        distance = hardwareMap.get(DistanceSensor.class, "distance_sensor");
 
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
         intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
