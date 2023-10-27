@@ -13,9 +13,12 @@ public class Lift {
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
     private Servo wristServo;
+    private Servo hookServo;
+
     private float wristPosition;
     private double armExtendModifier = 0.5;
     private double wristSpeedModifier = 0.05;
+
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
     private int armPickupAngle = -200;
@@ -28,13 +31,13 @@ public class Lift {
     private int liftCompactExtend = 0;
     private int armCompactAngle = 0;
 
-    Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo) {
+    Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo, Servo hook) {
         // Create lift object with all powers
         this.liftRotateMotor = liftRotateMotor;
         this.liftExtendMotor = liftExtendMotor;
         this.wristServo = wristServo;
+        this.hookServo = hook;
 
-        liftRotateMotor.setDirection(DcMotor.Direction.REVERSE);
         liftRotateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftRotateMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -47,9 +50,14 @@ public class Lift {
         // Positive for up, negative for down
         if (-0.1 < speed && speed < 0.1) {
             liftExtendMotor.setPower(0);
+            if liftExtendMotor.getCurrentPosition() <5 {
+                // Near bottom
+                hookServo.setPosition(0) // Turn on
+            }
         }
         else {
-            liftExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            hookServo.setPosition(1) // Turn off
+            liftExtendMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
             liftExtendMotor.setPower(speed*armExtendModifier);
         }
     }
@@ -59,7 +67,7 @@ public class Lift {
             liftRotateMotor.setPower(0);
         }
         else {
-            liftRotateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            liftRotateMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
             liftRotateMotor.setPower(speed);
         }
     }
@@ -88,10 +96,12 @@ public class Lift {
         catch(InterruptedException ex){
             ex.printStackTrace();
         }
+        hookServo.setPosition(0) // Turn on
     }
 
     public void moveToBasePosition(){
         /**Move to position to place on bottom position */
+        hookServo.setPosition(1) // Turn off
         wristServo.setPosition(wristBaseAngle);
         liftExtendMotor.setTargetPosition(liftBaseExtend);
         liftRotateMotor.setTargetPosition(armBaseAngle);
@@ -122,5 +132,6 @@ public class Lift {
         catch(InterruptedException ex){
             ex.printStackTrace();
         }
+        hookServo.setPosition(0) // Turn on
     }
 }
