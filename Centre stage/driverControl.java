@@ -67,7 +67,7 @@ public class DriverControl extends OpMode {
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
         liftRotateMotor = hardwareMap.get(DcMotorEx.class, "lift_rotate_motor");
-        liftExtendMotor = hardwareMap.get(DcMotorEx.class, "right_extend_motor");
+        liftExtendMotor = hardwareMap.get(DcMotorEx.class, "lift_extend_motor");
         //seems like this could get confused easily it should be something better like wrist_servo
         wristServo = hardwareMap.get(Servo.class, "intake_servo");
         // leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
