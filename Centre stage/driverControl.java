@@ -46,6 +46,7 @@ public class driverControl extends OpMode {
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
     private Servo wristServo;
+    private Servo hookServo;
 
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
@@ -70,12 +71,13 @@ public class driverControl extends OpMode {
         liftExtendMotor = hardwareMap.get(DcMotorEx.class, "lift_extend_motor");
         //seems like this could get confused easily it should be something better like wrist_servo
         wristServo = hardwareMap.get(Servo.class, "intake_servo");
-        // leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
-        // rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
+        leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
+        rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
+        hookServo = hardwareMap.get(Servo.class, "hook_servo");
 
         // Create module references
-        lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
-        // intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
+        lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo, hookServo);
+        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
         drivetrain = new Motion(motor_front_right,motor_back_left,motor_front_left,motor_back_right,imu);
         
 
@@ -99,8 +101,6 @@ public class driverControl extends OpMode {
      */
     @Override
     public void loop() {
-        String s=String.valueOf(gamepad1.left_stick_x);
-        telemetry.addData("left-stick",s);
         telemetry.update();
         // Main loop
         // Movement
@@ -121,18 +121,20 @@ public class driverControl extends OpMode {
             lift.rotateWrist(0);
         }
 
-        // if (gamepad2.x){
-        //     intake.outakeLeft();
-        // }
-        // else if (gamepad2.b){
-        //     intake.outakeRight();
-        // }
-        // else if (gamepad2.a) {
-        //     intake.intake();
-        // } 
-        // else {
-        //     intake.stopIntakeOuttake();
-        // }
+        if (gamepad2.x){
+            intake.outakeLeft();
+        }
+        else if (gamepad2.b){
+            intake.outakeRight();
+        }
+        else if (gamepad2.a) {
+            intake.intake();
+        } 
+        else {
+            intake.stopIntakeOuttake();
+        }
+        
+        telemetry.addData("Extend", liftExtendMotor.getCurrentPosition());
 
         telemetry.update();
     }

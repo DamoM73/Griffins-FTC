@@ -18,6 +18,7 @@ public class Lift {
     private float wristPosition;
     private double armExtendModifier = 0.5;
     private double wristSpeedModifier = 0.05;
+    private double armRotateModifier = 0.1;
 
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
@@ -48,17 +49,32 @@ public class Lift {
     
     public void extendArm(double speed){
         // Positive for up, negative for down
-        if (-0.1 < speed && speed < 0.1) {
+        if (speed > -0.1 && speed < 0.1) {
             liftExtendMotor.setPower(0);
-            if liftExtendMotor.getCurrentPosition() <5 {
+            if (liftExtendMotor.getCurrentPosition() < 5) {
                 // Near bottom
-                hookServo.setPosition(0) // Turn on
+                hookServo.setPosition(1); // Turn on
             }
         }
+        // if joystick is moved
         else {
-            hookServo.setPosition(1) // Turn off
-            liftExtendMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
-            liftExtendMotor.setPower(speed*armExtendModifier);
+            // if max
+            if (liftExtendMotor.getCurrentPosition()>1750) {
+                liftExtendMotor.setTargetPosition(1750);
+                liftExtendMotor.setPower(0.2);
+                liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            // if min
+            else if (liftExtendMotor.getCurrentPosition()<0) {
+                liftExtendMotor.setTargetPosition(0);
+                liftExtendMotor.setPower(0.2);
+                liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            else {
+                hookServo.setPosition(0); // Turn off
+                liftExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+                liftExtendMotor.setPower(speed*armExtendModifier);
+            }
         }
     }
 
@@ -67,8 +83,8 @@ public class Lift {
             liftRotateMotor.setPower(0);
         }
         else {
-            liftRotateMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
-            liftRotateMotor.setPower(speed);
+            liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+            liftRotateMotor.setPower(speed*armRotateModifier);
         }
     }
 
@@ -96,12 +112,12 @@ public class Lift {
         catch(InterruptedException ex){
             ex.printStackTrace();
         }
-        hookServo.setPosition(0) // Turn on
+        hookServo.setPosition(1); // Turn on
     }
 
     public void moveToBasePosition(){
         /**Move to position to place on bottom position */
-        hookServo.setPosition(1) // Turn off
+        hookServo.setPosition(1); // Turn off
         wristServo.setPosition(wristBaseAngle);
         liftExtendMotor.setTargetPosition(liftBaseExtend);
         liftRotateMotor.setTargetPosition(armBaseAngle);
@@ -132,6 +148,6 @@ public class Lift {
         catch(InterruptedException ex){
             ex.printStackTrace();
         }
-        hookServo.setPosition(0) // Turn on
+        hookServo.setPosition(1); // Turn on
     }
 }
