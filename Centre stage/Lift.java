@@ -7,8 +7,8 @@
 
     // Class for control of vertical lift
     public class Lift {
-        // Create variables
-        public Blinker expansion_Hub_2;
+    // Create variables
+    public Blinker expansion_Hub_2;
 
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
