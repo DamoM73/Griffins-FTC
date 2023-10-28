@@ -33,9 +33,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 
-// Class for Driver Control
-//Harry why was it Driver Controlled before in the teleop?? also the script was called driverControl
-// note from alex - gfd harry
+// Class for Driver Controls
 @TeleOp(name = "Driver Control")
 public class driverControl extends OpMode {
     public BNO055IMU imu;
@@ -113,10 +111,10 @@ public class driverControl extends OpMode {
 
         // wrist
         if (gamepad2.right_bumper) {
-            lift.rotateWrist(1/72);
+            lift.rotateWrist(1);
         }
         else if (gamepad2.left_bumper) {
-            lift.rotateWrist(1/72*-1);
+            lift.rotateWrist(-1);
         } else {
             lift.rotateWrist(0);
         }
