@@ -13,9 +13,12 @@
         private DcMotor liftRotateMotor;
         private DcMotor liftExtendMotor;
         private Servo wristServo;
+        private Servo hookServo;
+    
         private float wristPosition;
         private double armExtendModifier = 0.5;
         private double wristSpeedModifier = 0.05;
+    
         private double wristPickupAngle = 0.5;
         private int liftPickupExtend = 0;
         private int armPickupAngle = -200;
@@ -27,17 +30,17 @@
         private float wristCompactAngle = 0;
         private int liftCompactExtend = 0;
         private int armCompactAngle = 0;
-
-        Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo) {
+        
+        Lift (DcMotor liftRotateMotor, DcMotor liftExtendMotor, Servo wristServo, Servo hook) {
             // Create lift object with all powers
             this.liftRotateMotor = liftRotateMotor;
             this.liftExtendMotor = liftExtendMotor;
             this.wristServo = wristServo;
-
-            liftRotateMotor.setDirection(DcMotor.Direction.REVERSE);
+            this.hookServo = hook;
+    
             liftRotateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftRotateMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+    
             liftExtendMotor.setDirection(DcMotor.Direction.REVERSE);
             liftExtendMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftExtendMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -47,32 +50,38 @@
             // Positive for up, negative for down
             if (-0.1 < speed && speed < 0.1) {
                 liftExtendMotor.setPower(0);
+                if (liftExtendMotor.getCurrentPosition() <5) {
+                    // Near bottom
+                    hookServo.setPosition(0); // Turn on
+                }
             }
             else {
-                liftExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                liftExtendMotor.setPower(speed*armExtendModifier*0.25);
+                hookServo.setPosition(1); // Turn off
+                liftExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                liftExtendMotor.setPower(speed*armExtendModifier);
             }
         }
-
+    
         public void rotateArm(double speed) {
             if (-0.1 < speed && speed < 0.1) {
                 liftRotateMotor.setPower(0);
             }
+        
             else {
-                liftRotateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 liftRotateMotor.setPower(speed*0.25);
             }
         }
-
+    
         public void rotateWrist(double speed) {
         
             ///????? IDK, it is a servo which means you cnat use set power and stuff so i am seeing if this works, it gets the position and then modifys it so it can rotate or maybe it is a contin
             //wristServo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //wristServo.setPower(speed);
-
+    
             wristServo.setPosition(wristServo.getPosition() + speed*wristSpeedModifier);
         }
-
+    
         public void pickUpPosition() {
             /**Move to pick up Position */
             wristServo.setPosition(wristPickupAngle);
@@ -89,9 +98,10 @@
                 ex.printStackTrace();
             }
         }
-
+    
         public void moveToBasePosition(){
             /**Move to position to place on bottom position */
+            hookServo.setPosition(1); // Turn off
             wristServo.setPosition(wristBaseAngle);
             liftExtendMotor.setTargetPosition(liftBaseExtend);
             liftRotateMotor.setTargetPosition(armBaseAngle);
@@ -105,8 +115,9 @@
             catch(InterruptedException ex){
                 ex.printStackTrace();
             }
+            hookServo.setPosition(0); // Turn on
         }
-
+    
         public void compact() {
             /**Move to compacted position */
             wristServo.setPosition(wristCompactAngle);
@@ -122,5 +133,7 @@
             catch(InterruptedException ex){
                 ex.printStackTrace();
             }
+            
+            hookServo.setPosition(0); // Turn on
         }
     }
