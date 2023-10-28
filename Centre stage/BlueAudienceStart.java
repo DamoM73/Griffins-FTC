@@ -75,7 +75,7 @@ public class BlueAudienceStart extends LinearOpMode {
         rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
         distance = hardwareMap.get(DistanceSensor.class, "distance_sensor");
 
-        lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo);
+        lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo,);
         intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
 
         // initialise objects for expansion hub components
