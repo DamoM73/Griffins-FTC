@@ -133,9 +133,9 @@ public class Motion {
             }
         } else {
             // If not turning, use normal mechannum drive formulas
-            motor_front_right.setPower(front_right_power(right_y, right_x*-1, left_x));
+            motor_front_right.setPower(front_right_power(right_y*-1, right_x*-1, left_x));
             motor_back_right.setPower(back_right_power(right_y*-1, right_x*-1, -left_x));
-            motor_front_left.setPower(front_left_power(right_y, right_x*-1, -left_x));;
+            motor_front_left.setPower(front_left_power(right_y*-1, right_x*-1, -left_x));;
             motor_back_left.setPower(back_left_power(right_y*-1, right_x*-1, left_x));
         }
     }
