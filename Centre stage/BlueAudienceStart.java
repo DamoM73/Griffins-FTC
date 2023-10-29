@@ -147,17 +147,17 @@ public class BlueAudienceStart extends LinearOpMode {
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
-                    driveTrain.motorBwdTargetPositions(20,0.1);
-                    driveTrain.rotate(90,0.4);
+                    driveTrain.motorBwdTargetPositions(20,0.2);
+                    driveTrain.motorLftTargetPositions(15,0.1);
                     lift.compact();
-                    driveTrain.motorFwdTargetPositions(60,0.4);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.motorLftTargetPositions(60,0.4);
                     driveTrain.motorFwdTargetPositions(180,0.4);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.motorRgtTargetPositions(60, 0.4);
                     lift.moveToBasePosition();
-                    driveTrain.motorFwdTargetPositions(50,0.4);
-                    driveTrain.rotate(90,0.4);
-                    driveTrain.motorFwdTargetPositions(20,0.2);
+                    int fwdAdj = 0;
+                    int rgtAdj = 0;
+                    driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
+                    driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
                     intake.outakeRightAuto();
                 }
                 else {
