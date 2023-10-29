@@ -118,7 +118,7 @@ public class RedAudienceStart extends LinearOpMode {
         if (opModeIsActive()) {
             driveTrain.motorFwdTargetPositions(60,0.5);
             double centralPixelDistance = distance.getDistance(DistanceUnit.CM);
-            if (centralPixelDistance > 20) {
+            if (centralPixelDistance < 20) {
                 // Pixel in centre
                 driveTrain.motorRgtTargetPositions(10,0.5);
                 driveTrain.motorFwdTargetPositions(20,0.2);
@@ -140,7 +140,7 @@ public class RedAudienceStart extends LinearOpMode {
                 driveTrain.rotate(90,0.4);
                 driveTrain.motorRgtTargetPositions(15,0.1);
                 double leftPixelDistance = distance.getDistance(DistanceUnit.CM);
-                if (leftPixelDistance > 20) {
+                if (leftPixelDistance < 20) {
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();

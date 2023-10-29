@@ -21,12 +21,6 @@ public class IntakeOuttake {
         this.leftIntakeOuttake = leftIntakeOuttake;
     }  
 
-
-    public void intake(){
-        rightIntakeOuttake.setPosition(1);
-        leftIntakeOuttake.setPosition(1);
-    }
-
     public void intakeAuto(){
         rightIntakeOuttake.setPosition(1);
         leftIntakeOuttake.setPosition(1);
@@ -60,15 +54,20 @@ public class IntakeOuttake {
     }
     
     public void outakeLeft(){
-        leftIntakeOuttake.setPosition(-1);
+        leftIntakeOuttake.setPosition(0);
     }
 
     public void outakeRight(){
-        rightIntakeOuttake.setPosition(-1);
+        rightIntakeOuttake.setPosition(1);
+    }
+
+    public void intake(){
+        rightIntakeOuttake.setPosition(0);
+        leftIntakeOuttake.setPosition(1);
     }
 
     public void stopIntakeOuttake(){
-        rightIntakeOuttake.setPosition(0);
-        leftIntakeOuttake.setPosition(0);
+        rightIntakeOuttake.setPosition(0.7);
+        leftIntakeOuttake.setPosition(0.6);
     }
 }

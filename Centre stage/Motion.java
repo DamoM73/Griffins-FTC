@@ -171,10 +171,10 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         
         // set target positions when travelling forward (all +)
-        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
-        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT))*-1;
+        int motor1Target = (int)(motor_front_right.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT));
+        int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT));
         int motor3Target = (int)motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
-        int motor4Target = (int)motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
+        int motor4Target = (int)motor_back_left.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT);
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
@@ -223,9 +223,9 @@ public class Motion {
         
         // set target positions when travelling backward
         int motor1Target = (int)((motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
-        int motor2Target = (int)((motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
-        int motor3Target = (int)(-1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
-        int motor4Target = (int)(-1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
+        int motor2Target = (int)((motor_front_left.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
+        int motor3Target = (int)((motor_back_right.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
+        int motor4Target = (int)((motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_STRAIGHT)));
 
         // set motors to drive to position
         motor_front_right.setTargetPosition(motor1Target);
@@ -273,10 +273,10 @@ public class Motion {
         motor_back_left.setMode(DcMotor.RunMode.RESET_ENCODERS);
         
         // set target positions when driving right (fr -, bl -)
-        int motor1Target = (int)(-1 * (motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor1Target = (int)((motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
         int motor2Target = (int)(motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
-        int motor3Target = (int)(-1* (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
-        int motor4Target = (int)(1 * (motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor3Target = (int)((motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor4Target = (int)((motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
@@ -325,10 +325,10 @@ public class Motion {
         
         
         // set target positions when driving left (fl -, br -)
-        int motor1Target = (int)(motor_front_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
-        int motor2Target = (int)(-1 * (motor_front_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
-        int motor3Target = (int)(1 * (motor_back_right.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
-        int motor4Target = (int)(-1*(motor_back_left.getCurrentPosition() + (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor1Target = (int)(motor_front_right.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS));
+        int motor2Target = (int)((motor_front_left.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor3Target = (int)((motor_back_right.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
+        int motor4Target = (int)((motor_back_left.getCurrentPosition() - (int)(cmDistance * DRIVE_COUNTS_PER_CM_SIDEWAYS)));
 
         // set motors to drive to position.
         motor_front_right.setTargetPosition(motor1Target);
@@ -404,12 +404,12 @@ public class Motion {
 
         if (degrees < 0)
         {   // turn right.
-            leftPower = power;
+            leftPower = -power;
             rightPower = -power;
         }
         else if (degrees > 0)
         {   // turn left.
-            leftPower = -power;
+            leftPower = power;
             rightPower = power;
         }
         else return; // at target already
@@ -442,11 +442,11 @@ public class Motion {
                 }
                 
                 if (degrees < 0) {   // turn right.
-                    leftPower = power*scaleFactor;
+                    leftPower = -power*scaleFactor;
                     rightPower = -power*scaleFactor;
                 }
                 else if (degrees > 0) {   // turn left.
-                    leftPower = -power*scaleFactor;
+                    leftPower = power*scaleFactor;
                     rightPower = power*scaleFactor;
                 }
                 

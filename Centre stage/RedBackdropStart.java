@@ -118,20 +118,21 @@ public class RedBackdropStart extends LinearOpMode {
         if (opModeIsActive()) {
             driveTrain.motorFwdTargetPositions(60,0.5);
             double centralPixelDistance = distance.getDistance(DistanceUnit.CM);
-            if (centralPixelDistance > 20){
+            if (centralPixelDistance < 20){
                 //Pixel in centre
                 driveTrain.motorRgtTargetPositions(10,0.5);
                 driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
                 lift.pickUpPosition();
                 intake.outakeLeftAuto();
-                driveTrain.rotate(90,0.5);
-                lift.compact();
-                driveTrain.motorFwdTargetPositions(120,0.5);
+                driveTrain.rotate(-90,0.5);
+                lift.moveToBasePosition();
+                driveTrain.motorFwdTargetPositions(80,0.5);
                 intake.outakeRightAuto();
                 driveTrain.motorRgtTargetPositions(70,0.5);
+                driveTrain.motorFwdTargetPositions(50,0.5);
             }
             else{
-                driveTrain.rotate(-90,0.5);
+                driveTrain.rotate(90,0.5);
                 driveTrain.motorRgtTargetPositions(15,0.5);
                 double leftPixelDistance = distance.getDistance(DistanceUnit.CM);
                 if(leftPixelDistance < 20){
@@ -140,23 +141,28 @@ public class RedBackdropStart extends LinearOpMode {
                     intake.outakeLeftAuto();
                     driveTrain.motorBwdTargetPositions(20,0.5);
                     driveTrain.rotate(180,0.5);
-                    lift.compact();
-                    driveTrain.motorFwdTargetPositions(120,0.5);
+                    lift.moveToBasePosition();
+                    driveTrain.motorFwdTargetPositions(80,0.5);
                     intake.outakeRightAuto();
                     driveTrain.motorRgtTargetPositions(60,0.5);
+                    driveTrain.motorFwdTargetPositions(50,0.5);
                 }
                 else{
                     driveTrain.rotate(180,0.5);
-                    driveTrain.motorFwdTargetPositions(30,0.5);
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
-                    driveTrain.motorBwdTargetPositions(20,0.5);
-                    lift.compact();
-                    driveTrain.motorRgtTargetPositions(60,0.5);
+                    driveTrain.motorBwdTargetPositions(10,0.5);
+                    lift.moveToBasePosition();
+                    driveTrain.rotate(-90,0.5);
                     driveTrain.motorFwdTargetPositions(60,0.5);
-                    driveTrain.motorLftTargetPositions(60,0.5);
+                    driveTrain.rotate(90,0.5);
+                    driveTrain.motorFwdTargetPositions(60,0.5);
+                    driveTrain.rotate(90,0.5);
+                    driveTrain.motorFwdTargetPositions(60,0.5);
+                    driveTrain.rotate(-90,0.5);
                     intake.outakeRightAuto();
                     driveTrain.motorRgtTargetPositions(50,0.5);
+                    driveTrain.motorFwdTargetPositions(50,0.5);
                 }
             }
         }

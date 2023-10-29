@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Blue Backdrop")
-public class BlueBackdropStart extends LinearOpMode {
+@Autonomous(name = "Test Autonomous")
+public class TestAutoDrives extends LinearOpMode {
     public int square = 60;
     
     public DcMotor Motor;
@@ -61,24 +61,12 @@ public class BlueBackdropStart extends LinearOpMode {
         //Initialises all the required variables and objects and initialises them
         //ready for the start();
         Motion driveTrain;
-        Lift lift;
-        IntakeOuttake intake;
         
         // initialise object for the dc motor
         motor_front_right = hardwareMap.get(DcMotorEx.class, "motor_front_right");
         motor_front_left = hardwareMap.get(DcMotorEx.class, "motor_front_left");
         motor_back_right = hardwareMap.get(DcMotorEx.class, "motor_back_right");
         motor_back_left = hardwareMap.get(DcMotorEx.class, "motor_back_left");
-        liftRotateMotor = hardwareMap.get(DcMotorEx.class, "lift_rotate_motor");
-        liftExtendMotor = hardwareMap.get(DcMotorEx.class, "lift_extend_motor");
-        wristServo = hardwareMap.get(Servo.class, "intake_servo");
-        leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
-        rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
-        distance = hardwareMap.get(DistanceSensor.class, "distance_sensor");
-        hookServo = hardwareMap.get(Servo.class, "hook_servo");
-
-        lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo, hookServo);
-        intake = new IntakeOuttake(leftIntakeServo, rightIntakeServo);
 
         // initialise objects for expansion hub components
         //expansion_Hub_1 = hardwareMap.get(Blinker.class, "Expansion Hub 1");
@@ -116,50 +104,12 @@ public class BlueBackdropStart extends LinearOpMode {
         waitForStart();
         // run during autonomous
         if (opModeIsActive()) {
-            driveTrain.motorFwdTargetPositions(60,0.5);
-            double centralPixelDistance = distance.getDistance(DistanceUnit.CM);
-            if (centralPixelDistance < 20){
-                //Pixel in centre
-                driveTrain.motorLftTargetPositions(10,0.5);
-                driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
-                lift.pickUpPosition();
-                intake.outakeLeftAuto();
-                driveTrain.rotate(90,0.5);
-                lift.moveToBasePosition();
-                driveTrain.motorFwdTargetPositions(100,0.5);
-                intake.outakeRightAuto();
-                driveTrain.motorLftTargetPositions(70,0.5);
-                driveTrain.motorFwdTargetPositions(50,0.5);
-            }
-            else{
-                driveTrain.rotate(90,0.5);
-                driveTrain.motorLftTargetPositions(15,0.5);
-                double leftPixelDistance = distance.getDistance(DistanceUnit.CM);
-                if(leftPixelDistance < 20){
-                    driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
-                    lift.pickUpPosition();
-                    intake.outakeLeftAuto();
-                    driveTrain.motorBwdTargetPositions(20,0.5);
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(80,0.5);
-                    driveTrain.motorRgtTargetPositions(60,0.5);
-                    lift.moveToBasePosition();
-                    intake.outakeRightAuto();
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(50,0.5);
-                }
-                else{
-                    driveTrain.rotate(180,0.5);
-                    lift.pickUpPosition();
-                    intake.outakeLeftAuto();
-                    lift.moveToBasePosition();
-                    driveTrain.rotate(180,0.5);
-                    driveTrain.motorFwdTargetPositions(70,0.5);
-                    intake.outakeRightAuto();
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(50,0.5);
-                }
-            }
+            driveTrain.motorFwdTargetPositions(20,0.5);
+            driveTrain.motorLftTargetPositions(20,0.5);
+            driveTrain.motorBwdTargetPositions(20,0.5);
+            driveTrain.motorRgtTargetPositions(20,0.5);
+            driveTrain.rotate(90,0.5)
+            
         }
     }
 }

@@ -117,69 +117,110 @@ public class BlueAudienceStart extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             driveTrain.motorFwdTargetPositions(square,0.5);
+            telemetry.addData("Marker", "Check Centre");
+            telemetry.update();
             double centralMarkerDistance = distance.getDistance(DistanceUnit.CM);
-            if (centralMarkerDistance > 20) {
+            if (centralMarkerDistance < 20) {
                 // marker in centre
+                telemetry.addData("Marker", "2");
+                telemetry.update();
                 driveTrain.motorRgtTargetPositions(10,0.5);
                 driveTrain.motorFwdTargetPositions(20,0.2);
+                telemetry.addData("Position", "Put Down");
+                telemetry.update();
                 lift.pickUpPosition();
                 intake.outakeLeftAuto();
-                driveTrain.motorBwdTargetPositions(20, 0.2);
+                telemetry.addData("Position", "Go back to centre");
+                telemetry.update();
+                driveTrain.motorBwdTargetPositions(10, 0.2);
                 driveTrain.motorLftTargetPositions(10, 0.05);
                 lift.compact();
                 driveTrain.motorBwdTargetPositions(square,0.4); //move back out
+                telemetry.addData("Position", "Start");
+                telemetry.update();
                 driveTrain.rotate(90,0.4); //90 anticlockwise
                 driveTrain.motorFwdTargetPositions(square*3,0.4);
                 driveTrain.motorRgtTargetPositions(square, 0.4);
+                telemetry.addData("Position", "In Front of backdrop");
+                telemetry.update();
                 lift.moveToBasePosition();
                 int fwdAdj = 0;
                 int rgtAdj = 0;
                 driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
                 driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                telemetry.addData("Position", "Ready to place");
+                telemetry.update();
                 intake.outakeRightAuto();
             }
             else {
                 // turn to check left marker
                 driveTrain.rotate(90,0.4);
                 driveTrain.motorRgtTargetPositions(15,0.2);
+                telemetry.addData("Marker", "Check Left");
+                telemetry.update();
                 double leftMarkerDistance = distance.getDistance(DistanceUnit.CM);
-                if (leftMarkerDistance > 20) {
+                if (leftMarkerDistance < 20) {
+                    telemetry.addData("Marker", "1");
+                    telemetry.update();
                     // marker on left
                     driveTrain.motorLftTargetPositions(5,0.2);
                     driveTrain.motorFwdTargetPositions(20,0.2);
+                    telemetry.addData("Position", "Put down");
+                    telemetry.update();
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
                     driveTrain.motorBwdTargetPositions(20,0.2);
                     lift.compact();
-                    driveTrain.motorLftTargetPositions(square+10,0.4);
+                    //driveTrain.motorLftTargetPositions(square+10,0.4); NOT PRECISE ENOUGH, SORRY ALEX
+                    driveTrain.rotate(90,0.4);
+                    driveTrain.motorFwdTargetPositions(square+10,0.5);
+                    driveTrain.rotate(-90,0.4);
+                    telemetry.addData("Position", "Start");
+                    telemetry.update();
                     driveTrain.motorFwdTargetPositions(square*3,0.4);
                     driveTrain.motorRgtTargetPositions(square, 0.4);
+                    telemetry.addData("Position", "In Front of backdrop");
+                    telemetry.update();
                     lift.moveToBasePosition();
                     int fwdAdj = 0;
                     int rgtAdj = 0;
                     driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
                     driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                    telemetry.addData("Position", "Ready to place");
+                    telemetry.update();
                     intake.outakeRightAuto();
                 }
                 else {
                     // marker on right
                     driveTrain.rotate(180,0.4);
+                    telemetry.addData("Marker", "3");
+                    telemetry.update();
                     driveTrain.motorLftTargetPositions(5,0.2);
                     driveTrain.motorFwdTargetPositions(20,0.2);
+                    telemetry.addData("Position", "Put down");
+                    telemetry.update();
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
                     driveTrain.motorBwdTargetPositions(20,0.2);
                     driveTrain.motorRgtTargetPositions(20, 0.2);
-                    driveTrain.rotate(180,0.4);
+                    driveTrain.rotate(-90,0.4);
                     lift.compact();
-                    driveTrain.motorLftTargetPositions(square,0.4);
+                    //driveTrain.motorLftTargetPositions(square,0.4); NOT PRECISE ENOUGH, SORRY ALEX
+                    driveTrain.motorFwdTargetPositions(square,0.5);
+                    driveTrain.rotate(-90,0.4);
+                    telemetry.addData("Position", "Start");
+                    telemetry.update();
                     driveTrain.motorFwdTargetPositions(square*3,0.4);
                     driveTrain.motorRgtTargetPositions(square, 0.4);
+                    telemetry.addData("Position", "In Front of backdrop");
+                    telemetry.update();
                     lift.moveToBasePosition();
                     int fwdAdj = 0;
                     int rgtAdj = 0;
                     driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
                     driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                    telemetry.addData("Position", "Ready to place");
+                    telemetry.update();
                     intake.outakeRightAuto();
                 }
             }

@@ -23,11 +23,11 @@
 
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
-    private int armPickupAngle = -200;
+    private int armPickupAngle = 0;
 
     private float wristBaseAngle = 1;
     private int liftBaseExtend = 0;
-    private int armBaseAngle = -50;
+    private int armBaseAngle = -300;
 
     private float wristCompactAngle = 0;
     private int liftCompactExtend = 0;
@@ -86,9 +86,10 @@
             liftRotateMotor.setPower(0.8);
         }
         else {
-            position = liftRotateMotor.getCurrentPosition();
-            liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-            liftRotateMotor.setPower(speed*armRotateModifier);
+            if (liftRotateMotor.getCurrentPosition()>0){
+                liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+                liftRotateMotor.setPower(speed*armRotateModifier);
+            }
         }
     }
 
