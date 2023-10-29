@@ -9,6 +9,7 @@
     public class Lift {
     // Create variables
     public Blinker expansion_Hub_2;
+    private int position;
 
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
@@ -17,7 +18,7 @@
 
     private float wristPosition;
     private double armExtendModifier = 0.5;
-    private double wristSpeedModifier = 0.05;
+    private double wristSpeedModifier = 0.005;
     private double armRotateModifier = 0.1;
 
     private double wristPickupAngle = 0.5;
@@ -80,9 +81,12 @@
 
     public void rotateArm(double speed) {
         if (-0.1 < speed && speed < 0.1) {
-            liftRotateMotor.setPower(0);
+            liftRotateMotor.setTargetPosition(position);
+            liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftRotateMotor.setPower(0.8);
         }
         else {
+            position = liftRotateMotor.getCurrentPosition();
             liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
             liftRotateMotor.setPower(speed*armRotateModifier);
         }
