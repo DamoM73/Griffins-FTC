@@ -116,7 +116,7 @@ public class BlueAudienceStart extends LinearOpMode {
         waitForStart();
         // run during autonomous
         if (opModeIsActive()) {
-            driveTrain.motorFwdTargetPositions(60,0.5);
+            driveTrain.motorFwdTargetPositions(square,0.5);
             double centralMarkerDistance = distance.getDistance(DistanceUnit.CM);
             if (centralMarkerDistance > 20) {
                 // marker in centre
@@ -127,10 +127,10 @@ public class BlueAudienceStart extends LinearOpMode {
                 driveTrain.motorBwdTargetPositions(20, 0.2);
                 driveTrain.motorLftTargetPositions(10, 0.05);
                 lift.compact();
-                driveTrain.motorBwdTargetPositions(60,0.4); //move back out
+                driveTrain.motorBwdTargetPositions(square,0.4); //move back out
                 driveTrain.rotate(90,0.4); //90 anticlockwise
-                driveTrain.motorFwdTargetPositions(180,0.4);
-                driveTrain.motorRgtTargetPositions(60, 0.4);
+                driveTrain.motorFwdTargetPositions(square*3,0.4);
+                driveTrain.motorRgtTargetPositions(square, 0.4);
                 lift.moveToBasePosition();
                 int fwdAdj = 0;
                 int rgtAdj = 0;
@@ -141,18 +141,19 @@ public class BlueAudienceStart extends LinearOpMode {
             else {
                 // turn to check left marker
                 driveTrain.rotate(90,0.4);
-                driveTrain.motorRgtTargetPositions(15,0.1);
+                driveTrain.motorRgtTargetPositions(15,0.2);
                 double leftMarkerDistance = distance.getDistance(DistanceUnit.CM);
                 if (leftMarkerDistance > 20) {
+                    // marker on left
+                    driveTrain.motorLftTargetPositions(5,0.2);
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
                     driveTrain.motorBwdTargetPositions(20,0.2);
-                    driveTrain.motorLftTargetPositions(15,0.1);
                     lift.compact();
-                    driveTrain.motorLftTargetPositions(60,0.4);
-                    driveTrain.motorFwdTargetPositions(180,0.4);
-                    driveTrain.motorRgtTargetPositions(60, 0.4);
+                    driveTrain.motorLftTargetPositions(square+10,0.4);
+                    driveTrain.motorFwdTargetPositions(square*3,0.4);
+                    driveTrain.motorRgtTargetPositions(square, 0.4);
                     lift.moveToBasePosition();
                     int fwdAdj = 0;
                     int rgtAdj = 0;
@@ -161,22 +162,24 @@ public class BlueAudienceStart extends LinearOpMode {
                     intake.outakeRightAuto();
                 }
                 else {
-                    // On right
+                    // marker on right
                     driveTrain.rotate(180,0.4);
+                    driveTrain.motorLftTargetPositions(5,0.2);
                     driveTrain.motorFwdTargetPositions(20,0.2);
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
-                    driveTrain.motorBwdTargetPositions(20,0.1);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.motorBwdTargetPositions(20,0.2);
+                    driveTrain.motorRgtTargetPositions(20, 0.2);
+                    driveTrain.rotate(180,0.4);
                     lift.compact();
-                    driveTrain.motorFwdTargetPositions(60,0.4);
-                    driveTrain.rotate(-90,0.4);
-                    driveTrain.motorFwdTargetPositions(180,0.4);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.motorLftTargetPositions(square,0.4);
+                    driveTrain.motorFwdTargetPositions(square*3,0.4);
+                    driveTrain.motorRgtTargetPositions(square, 0.4);
                     lift.moveToBasePosition();
-                    driveTrain.motorFwdTargetPositions(70,0.4);
-                    driveTrain.rotate(90,0.4);
-                    driveTrain.motorFwdTargetPositions(20,0.2);
+                    int fwdAdj = 0;
+                    int rgtAdj = 0;
+                    driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
+                    driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
                     intake.outakeRightAuto();
                 }
             }
