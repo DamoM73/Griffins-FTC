@@ -68,6 +68,6 @@ public class IntakeOuttake {
 
     public void stopIntakeOuttake(){
         rightIntakeOuttake.setPosition(0.7);
-        leftIntakeOuttake.setPosition(0.6);
+        leftIntakeOuttake.setPosition(-0.2);
     }
 }
