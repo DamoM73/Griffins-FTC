@@ -1,0 +1,67 @@
+requirements:
+left intake -/
+left outtake -/
+right intake -/
+right outtake -/
+
+wrist up -/
+wrist down -/
+
+shoulder up -/
+shoulder down -/
+
+arm out  -/
+arm in  -/
+
+strafing -/
+rotating -/
+
+-------------
+controller 1:
+-------------
+
+left stick - strafing
+right stick - rotating
+left click - 
+right click - 
+
+dpad:
+up - 
+down - 
+left - 
+right - 
+
+a - 
+b - 
+x - 
+y - 
+
+left shoulder - 
+right shoulder - 
+left trigger - 
+right trigger - 
+
+-------------
+controller 2:
+-------------
+
+left stick - shoulder up/down (stick up/down)
+right stick - wrist up/down (stick up/down)
+left click - 
+right click - 
+
+dpad:
+up - arm out
+down - arm in
+left - 
+right - 
+
+a - right outtake
+b - right intake
+x - left intake
+y - left outtake
+
+left shoulder - 
+right shoulder - 
+left trigger - 
+right trigger - 
