@@ -132,8 +132,8 @@ public class BlueAudienceStart extends LinearOpMode {
                 intake.outakeLeftAuto();
                 telemetry.addData("Position", "Go back to centre");
                 telemetry.update();
-                driveTrain.motorBwdTargetPositions(10, 0.2);
-                driveTrain.motorLftTargetPositions(10, 0.05);
+                driveTrain.motorBwdTargetPositions(20, 0.2);
+                driveTrain.motorLftTargetPositions(10, 0.5);
                 lift.compact();
                 driveTrain.motorBwdTargetPositions(square,0.4); //move back out
                 telemetry.addData("Position", "Start");
