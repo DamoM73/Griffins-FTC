@@ -106,8 +106,8 @@ public class driverControl extends OpMode {
         drivetrain.JoystickMoving(gamepad1.left_stick_x, gamepad1.right_stick_x,gamepad1.right_stick_y);
         
         // Move arm
-        //lift.rotateArm(gamepad2.right_stick_y);
-        //lift.extendArm(gamepad2.left_trigger-gamepad2.right_trigger);
+        lift.rotateArm(gamepad2.right_stick_y);
+        lift.extendArm(gamepad2.left_trigger-gamepad2.right_trigger);
 
         // wrist
         if (gamepad2.right_bumper) {
@@ -138,9 +138,6 @@ public class driverControl extends OpMode {
         else if (gamepad2.dpad_right) {
             hookServo.setPosition(0);
         }
-        
-        telemetry.addData("Extend", liftExtendMotor.getCurrentPosition());
-
-        telemetry.update();
+        telemetry.addData("arm", lift.position);
     }
 }

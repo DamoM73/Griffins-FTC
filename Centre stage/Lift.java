@@ -1,4 +1,4 @@
-    package org.firstinspires.ftc.compcode.CentreStage;
+package org.firstinspires.ftc.compcode.CentreStage;
     // Imports
     import com.qualcomm.robotcore.hardware.Blinker;
     import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +9,7 @@
     public class Lift {
     // Create variables
     public Blinker expansion_Hub_2;
-    private int position;
+    public int position = 0;
 
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
@@ -18,8 +18,10 @@
 
     private float wristPosition;
     private double armExtendModifier = 0.5;
-    private double wristSpeedModifier = 0.005;
-    private double armRotateModifier = 0.1;
+    private double wristSpeedModifier = 0.001;
+    private double armRotateModifier = 0.2;
+    private int armRotateMax = -700;
+    private int armRotateMin = 0;
 
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
@@ -54,7 +56,7 @@
             liftExtendMotor.setPower(0);
             if (liftExtendMotor.getCurrentPosition() < 5) {
                 // Near bottom
-                hookServo.setPosition(1); // Turn on
+                //hookServo.setPosition(1); // Turn on
             }
         }
         // if joystick is moved
@@ -72,7 +74,7 @@
                 liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
             else {
-                hookServo.setPosition(0); // Turn off
+                //hookServo.setPosition(0); // Turn off
                 liftExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
                 liftExtendMotor.setPower(speed*armExtendModifier);
             }
@@ -80,17 +82,16 @@
     }
 
     public void rotateArm(double speed) {
-        if (-0.1 < speed && speed < 0.1) {
-            liftRotateMotor.setTargetPosition(position);
-            liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftRotateMotor.setPower(0.8);
+        if ((position + speed) < armRotateMax) {
+            position = armRotateMax;
+        } else if ((position + speed) > armRotateMin) {
+            position = armRotateMin;
+        } else {
+            position += speed;
         }
-        else {
-            if (liftRotateMotor.getCurrentPosition()>0){
-                liftRotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-                liftRotateMotor.setPower(speed*armRotateModifier);
-            }
-        }
+        liftRotateMotor.setTargetPosition(position);
+        liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftRotateMotor.setPower(1);
     }
 
     public void rotateWrist(double speed) {
