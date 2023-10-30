@@ -13,15 +13,15 @@
 
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
-    private Servo wristServo;
+    public Servo wristServo;
     private Servo hookServo;
 
     private float wristPosition;
     private double armExtendModifier = 0.5;
-    private double wristSpeedModifier = 0.001;
+    private double wristSpeedModifier = 0.002;
     private double armRotateModifier = 0.2;
     private int armRotateMax = -710;
-    public int armRotateMin = -200;
+    public int armRotateMin = 0;
 
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
