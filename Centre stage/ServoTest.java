@@ -39,8 +39,8 @@ public class ServoTest extends OpMode {
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
 
-    public double left;
-    public double right;
+    public double left = 0.5;
+    public double right = 0.5;
 
     @Override
     public void init() {
