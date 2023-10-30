@@ -92,6 +92,8 @@ public class driverControl extends OpMode {
         // Fun message to drivers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         telemetry.addData("Have Fun","Drivers");
         telemetry.update();
+        hookServo.setPosition(1); // close hook
+        lift.position = lift.armRotateMin;
     }
 
     /*

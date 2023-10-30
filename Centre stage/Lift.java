@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.compcode.CentreStage;
+    package org.firstinspires.ftc.compcode.CentreStage;
     // Imports
     import com.qualcomm.robotcore.hardware.Blinker;
     import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +9,7 @@ package org.firstinspires.ftc.compcode.CentreStage;
     public class Lift {
     // Create variables
     public Blinker expansion_Hub_2;
-    public int position = 0;
+    public int position=0;
 
     private DcMotor liftRotateMotor;
     private DcMotor liftExtendMotor;
@@ -20,8 +20,8 @@ package org.firstinspires.ftc.compcode.CentreStage;
     private double armExtendModifier = 0.5;
     private double wristSpeedModifier = 0.001;
     private double armRotateModifier = 0.2;
-    private int armRotateMax = -700;
-    private int armRotateMin = 0;
+    private int armRotateMax = -710;
+    public int armRotateMin = -200;
 
     private double wristPickupAngle = 0.5;
     private int liftPickupExtend = 0;
@@ -95,12 +95,13 @@ package org.firstinspires.ftc.compcode.CentreStage;
     }
 
     public void rotateWrist(double speed) {
-       
-        ///????? IDK, it is a servo which means you cnat use set power and stuff so i am seeing if this works, it gets the position and then modifys it so it can rotate or maybe it is a contin
-        //wristServo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //wristServo.setPower(speed);
-
-        wristServo.setPosition(wristServo.getPosition() + speed*wristSpeedModifier);
+        if ((wristServo.getPosition() + speed*wristSpeedModifier) > 1) {
+            wristServo.setPosition(1);
+        } else if ((wristServo.getPosition() + speed*wristSpeedModifier) < 0) {
+            wristServo.setPosition(0);
+        } else {
+            wristServo.setPosition(wristServo.getPosition() + speed*wristSpeedModifier);
+        }
     }
 
     public void pickUpPosition() {
