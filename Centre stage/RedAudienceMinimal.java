@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Blue Audience Minimal")
-public class BlueAudienceMinimal extends LinearOpMode {
+@Autonomous(name = "Red Audience Choose")
+public class RedAudienceMinimal extends LinearOpMode {
     public int square = 60;
     
     public DcMotor Motor;
@@ -122,15 +122,15 @@ public class BlueAudienceMinimal extends LinearOpMode {
             intake.outakeLeftAuto();
             lift.compact();
             driveTrain.motorBwdTargetPositions(square, 0.3);
-            driveTrain.rotate(90,0.4);
+            driveTrain.rotate(-90,0.4);
             // driveTrain.motorLftTargetPositions(10,0.3);
             driveTrain.motorFwdTargetPositions(square*3, 0.5);
-            driveTrain.rotate(-90,0.4);
-            driveTrain.motorFwdTargetPositions(square, 0.5);
             driveTrain.rotate(90,0.4);
+            driveTrain.motorFwdTargetPositions(square, 0.5);
+            driveTrain.rotate(-90,0.4);
             lift.moveToBasePosition();
             driveTrain.motorFwdTargetPositions(20, 0.3);
             intake.outakeRightAuto();
-            driveTrain.motorLftTargetPositions(square, 0.2);
+            driveTrain.motorRgtTargetPositions(square, 0.2);
             driveTrain.motorFwdTargetPositions(10, 0.3);
 }
