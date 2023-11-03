@@ -116,8 +116,9 @@ public class BlueAudienceStart extends LinearOpMode {
         waitForStart();
         // run during autonomous
         if (opModeIsActive()) {
+            hookServo.setPosition(1); // close hook
             driveTrain.motorFwdTargetPositions(square,0.5);
-            lift.moveToBasePosition()
+            lift.moveToUpPosition();
             telemetry.addData("Marker", "Check Centre");
             telemetry.update();
             double centralMarkerDistance = distance.getDistance(DistanceUnit.CM);
@@ -125,16 +126,14 @@ public class BlueAudienceStart extends LinearOpMode {
                 // marker in centre
                 telemetry.addData("Marker", "2");
                 telemetry.update();
-                driveTrain.motorRgtTargetPositions(10,0.5);
-                driveTrain.motorFwdTargetPositions(20,0.2);
+                driveTrain.motorRgtTargetPositions(3,0.5);
                 telemetry.addData("Position", "Put Down");
                 telemetry.update();
                 lift.pickUpPosition();
                 intake.outakeLeftAuto();
                 telemetry.addData("Position", "Go back to centre");
                 telemetry.update();
-                driveTrain.motorBwdTargetPositions(20, 0.2);
-                driveTrain.motorLftTargetPositions(10, 0.5);
+                driveTrain.motorLftTargetPositions(3, 0.5);
                 lift.compact();
                 driveTrain.motorBwdTargetPositions(square,0.4); //move back out
                 telemetry.addData("Position", "Start");

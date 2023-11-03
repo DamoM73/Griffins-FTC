@@ -112,14 +112,7 @@ public class driverControl extends OpMode {
         lift.extendArm(gamepad2.left_trigger-gamepad2.right_trigger);
 
         // wrist
-        if (gamepad2.right_bumper) {
-            lift.rotateWrist(1);
-        }
-        else if (gamepad2.left_bumper) {
-            lift.rotateWrist(-1);
-        } else {
-            lift.rotateWrist(0);
-        }
+        lift.rotateWrist(gamepad2.left_stick_y);
 
         if (gamepad2.y) {
             intake.outakeLeft();
@@ -143,8 +136,9 @@ public class driverControl extends OpMode {
         else if (gamepad2.dpad_right) {
             hookServo.setPosition(0);
         }
-        telemetry.addData("Arm", lift.position);
+        telemetry.addData("Extend", liftExtendMotor.getCurrentPosition());
+        telemetry.addData("Rotate", liftRotateMotor.getCurrentPosition());
         telemetry.addData("Wrist", lift.wristServo.getPosition());
         
     }
-}
+}  

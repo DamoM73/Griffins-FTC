@@ -23,13 +23,13 @@
     private int armRotateMax = -710;
     public int armRotateMin = 0;
 
-    private double wristPickupAngle = 0.5;
+    private double wristPickupAngle = 0.64611111 ;
     private int liftPickupExtend = 0;
     private int armPickupAngle = 0;
 
-    private float wristBaseAngle = 1;
-    private int liftBaseExtend = 0;
-    private int armBaseAngle = -300;
+    private float wristBaseAngle = 0.3f;
+    private int liftBaseExtend = 1115;
+    private int armBaseAngle = -527;
 
     private float wristCompactAngle = 0;
     private int liftCompactExtend = 0;
@@ -131,6 +131,19 @@
         liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftExtendMotor.setPower(1);
+        liftRotateMotor.setPower(1);
+        try {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void moveToUpPosition(){
+        /**Move to position to place on bottom position */
+        liftRotateMotor.setTargetPosition(armBaseAngle);
+        liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftRotateMotor.setPower(1);
         try {
             Thread.sleep(1000);
