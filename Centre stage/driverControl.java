@@ -45,6 +45,7 @@ public class driverControl extends OpMode {
     private DcMotor liftExtendMotor;
     private Servo wristServo;
     private Servo hookServo;
+    private Servo planeServo;
 
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
@@ -72,6 +73,7 @@ public class driverControl extends OpMode {
         leftIntakeServo = hardwareMap.get(Servo.class, "left_intake_servo");
         rightIntakeServo = hardwareMap.get(Servo.class, "right_intake_servo");
         hookServo = hardwareMap.get(Servo.class, "hook_servo");
+        planeServo = hardwareMap.get(Servo.class, "plane_servo");
 
         // Create module references
         lift = new Lift(liftRotateMotor, liftExtendMotor, wristServo, hookServo);
@@ -110,6 +112,13 @@ public class driverControl extends OpMode {
         // Move arm
         lift.rotateArm(gamepad2.right_stick_y);
         lift.extendArm(gamepad2.left_trigger-gamepad2.right_trigger);
+
+        if (gamepad1.a) {
+            planeServo.setPosition(0);
+        }
+        if (gamepad1.b) {
+            planeServo.setPosition(1);
+        }
 
         // wrist
         lift.rotateWrist(gamepad2.left_stick_y);
