@@ -116,48 +116,111 @@ public class BlueBackdropStart extends LinearOpMode {
         waitForStart();
         // run during autonomous
         if (opModeIsActive()) {
-            driveTrain.motorFwdTargetPositions(60,0.5);
-            double centralPixelDistance = distance.getDistance(DistanceUnit.CM);
-            if (centralPixelDistance < 20){
-                //Pixel in centre
-                driveTrain.motorLftTargetPositions(10,0.5);
-                driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
+            driveTrain.motorFwdTargetPositions(square,0.5);
+            double centralMarkerDistance = distance.getDistance(DistanceUnit.CM);
+            if (centralMarkerDistance < 20){
+                // marker in centre
+                telemetry.addData("Marker", "2");
+                telemetry.update();
+                driveTrain.motorRgtTargetPositions(10,0.5);
+                driveTrain.motorFwdTargetPositions(20,0.2);
+                telemetry.addData("Position", "Put Down");
+                telemetry.update();
                 lift.pickUpPosition();
                 intake.outakeLeftAuto();
-                driveTrain.rotate(90,0.5);
+                telemetry.addData("Position", "Go back to centre");
+                telemetry.update();
+                driveTrain.motorBwdTargetPositions(20, 0.2);
+                driveTrain.motorLftTargetPositions(10, 0.5);
+                lift.compact();
+                driveTrain.motorBwdTargetPositions(square,0.4); //move back out
+                telemetry.addData("Position", "Start");
+                telemetry.update();
+                driveTrain.rotate(90,0.4); //90 anticlockwise
+                driveTrain.motorFwdTargetPositions(square,0.4);
+                driveTrain.motorRgtTargetPositions(square, 0.4);
+                telemetry.addData("Position", "In Front of backdrop");
+                telemetry.update();
                 lift.moveToBasePosition();
-                driveTrain.motorFwdTargetPositions(100,0.5);
+                int fwdAdj = 0;
+                int rgtAdj = 0;
+                driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
+                driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                telemetry.addData("Position", "Ready to place");
+                telemetry.update();
                 intake.outakeRightAuto();
-                driveTrain.motorLftTargetPositions(70,0.5);
-                driveTrain.motorFwdTargetPositions(50,0.5);
             }
             else{
-                driveTrain.rotate(90,0.5);
-                driveTrain.motorLftTargetPositions(15,0.5);
-                double leftPixelDistance = distance.getDistance(DistanceUnit.CM);
-                if(leftPixelDistance < 20){
-                    driveTrain.motorFwdTargetPositions(20,0.2); //May need to be changed
+                // turn to check left marker
+                driveTrain.rotate(90,0.4);
+                driveTrain.motorRgtTargetPositions(15,0.2);
+                telemetry.addData("Marker", "Check Left");
+                telemetry.update();
+                double leftMarkerDistance = distance.getDistance(DistanceUnit.CM);
+                if(leftMarkerDistance < 20){
+                     telemetry.addData("Marker", "1");
+                    telemetry.update();
+                    // marker on left
+                    driveTrain.motorLftTargetPositions(5,0.2);
+                    driveTrain.motorFwdTargetPositions(20,0.2);
+                    telemetry.addData("Position", "Put down");
+                    telemetry.update();
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
-                    driveTrain.motorBwdTargetPositions(20,0.5);
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(80,0.5);
-                    driveTrain.motorRgtTargetPositions(60,0.5);
+                    driveTrain.motorBwdTargetPositions(20,0.2);
+                    lift.compact();
+                    //driveTrain.motorLftTargetPositions(square+10,0.4); NOT PRECISE ENOUGH, SORRY ALEX
+                    driveTrain.rotate(90,0.4); //replacement for motorLft
+                    driveTrain.motorFwdTargetPositions(square+10,0.5); //replacement for motorLft
+                    driveTrain.rotate(-90,0.4); //replacement for motorLft
+                    telemetry.addData("Position", "Start");
+                    telemetry.update();
+                    driveTrain.motorFwdTargetPositions(square,0.4);
+                    driveTrain.motorRgtTargetPositions(square, 0.4);
+                    telemetry.addData("Position", "In Front of backdrop");
+                    telemetry.update();
                     lift.moveToBasePosition();
+                    int fwdAdj = 0;
+                    int rgtAdj = 0;
+                    driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
+                    driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                    telemetry.addData("Position", "Ready to place");
+                    telemetry.update();
                     intake.outakeRightAuto();
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(50,0.5);
                 }
                 else{
-                    driveTrain.rotate(180,0.5);
+                    // marker on right
+                    driveTrain.rotate(180,0.4);
+                    telemetry.addData("Marker", "3");
+                    telemetry.update();
+                    driveTrain.motorLftTargetPositions(5,0.2);
+                    driveTrain.motorFwdTargetPositions(20,0.2);
+                    telemetry.addData("Position", "Put down");
+                    telemetry.update();
                     lift.pickUpPosition();
                     intake.outakeLeftAuto();
+                    driveTrain.motorBwdTargetPositions(20,0.2);
+                    driveTrain.motorRgtTargetPositions(20, 0.2);
+                    driveTrain.rotate(-90,0.4);
+                    lift.compact();
+                    //driveTrain.motorLftTargetPositions(square,0.4); NOT PRECISE ENOUGH, SORRY ALEX
+                    driveTrain.rotate(90,0.4); //replacement for motorLft
+                    driveTrain.motorFwdTargetPositions(square+10,0.5); //replacement for motorLft
+                    driveTrain.rotate(-90,0.4); //replacement for motorLft
+                    telemetry.addData("Position", "Start");
+                    telemetry.update();
+                    driveTrain.motorFwdTargetPositions(square,0.4);
+                    driveTrain.motorRgtTargetPositions(square, 0.4);
+                    telemetry.addData("Position", "In Front of backdrop");
+                    telemetry.update();
                     lift.moveToBasePosition();
-                    driveTrain.rotate(180,0.5);
-                    driveTrain.motorFwdTargetPositions(70,0.5);
+                    int fwdAdj = 0;
+                    int rgtAdj = 0;
+                    driveTrain.motorFwdTargetPositions(fwdAdj,0.2);
+                    driveTrain.motorRgtTargetPositions(rgtAdj,0.2);
+                    telemetry.addData("Position", "Ready to place");
+                    telemetry.update();
                     intake.outakeRightAuto();
-                    driveTrain.motorLftTargetPositions(60,0.5);
-                    driveTrain.motorFwdTargetPositions(50,0.5);
                 }
             }
         }

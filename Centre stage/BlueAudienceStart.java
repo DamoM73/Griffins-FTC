@@ -172,9 +172,9 @@ public class BlueAudienceStart extends LinearOpMode {
                     driveTrain.motorBwdTargetPositions(20,0.2);
                     lift.compact();
                     //driveTrain.motorLftTargetPositions(square+10,0.4); NOT PRECISE ENOUGH, SORRY ALEX
-                    driveTrain.rotate(90,0.4);
-                    driveTrain.motorFwdTargetPositions(square+10,0.5);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.rotate(90,0.4); //replacement for motorLft
+                    driveTrain.motorFwdTargetPositions(square+10,0.5); //replacement for motorLft
+                    driveTrain.rotate(-90,0.4); //replacement for motorLft
                     telemetry.addData("Position", "Start");
                     telemetry.update();
                     driveTrain.motorFwdTargetPositions(square*3,0.4);
@@ -206,8 +206,9 @@ public class BlueAudienceStart extends LinearOpMode {
                     driveTrain.rotate(-90,0.4);
                     lift.compact();
                     //driveTrain.motorLftTargetPositions(square,0.4); NOT PRECISE ENOUGH, SORRY ALEX
-                    driveTrain.motorFwdTargetPositions(square,0.5);
-                    driveTrain.rotate(-90,0.4);
+                    driveTrain.rotate(90,0.4); //replacement for motorLft
+                    driveTrain.motorFwdTargetPositions(square+10,0.5); //replacement for motorLft
+                    driveTrain.rotate(-90,0.4); //replacement for motorLft
                     telemetry.addData("Position", "Start");
                     telemetry.update();
                     driveTrain.motorFwdTargetPositions(square*3,0.4);
