@@ -117,6 +117,7 @@ public class BlueAudienceStart extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             driveTrain.motorFwdTargetPositions(square,0.5);
+            lift.moveToBasePosition()
             telemetry.addData("Marker", "Check Centre");
             telemetry.update();
             double centralMarkerDistance = distance.getDistance(DistanceUnit.CM);
