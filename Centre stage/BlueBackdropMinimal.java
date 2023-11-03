@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Blue Back Minimal")
+@Autonomous(name = "Blue Backdrop Minimal")
 public class BlueBackdropMinimal extends LinearOpMode {
     public int square = 60;
     
@@ -117,6 +117,9 @@ public class BlueBackdropMinimal extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             hookServo.setPosition(1); // close hook
+            liftRotateMotor.setTargetPosition(-100);
+            liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftRotateMotor.setPower(0.8);
             driveTrain.motorFwdTargetPositions(square+10, 0.3);
             lift.pickUpPosition();
             intake.outakeLeftAuto();
