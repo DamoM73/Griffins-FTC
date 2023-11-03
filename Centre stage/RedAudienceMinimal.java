@@ -117,6 +117,9 @@ public class RedAudienceMinimal extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             hookServo.setPosition(1); // close hook
+            liftRotateMotor.setTargetPosition(-100);
+            liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftRotateMotor.setPower(0.8);
             driveTrain.motorFwdTargetPositions(square+10, 0.3);
             lift.pickUpPosition();
             intake.outakeLeftAuto();
