@@ -117,7 +117,7 @@ public class RedBackdropMinimal extends LinearOpMode {
         // run during autonomous
         if (opModeIsActive()) {
             hookServo.setPosition(1); // close hook
-            liftRotateMotor.setTargetPosition(-100);
+            liftRotateMotor.setTargetPosition(-300);
             liftRotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftRotateMotor.setPower(0.8);
             driveTrain.motorFwdTargetPositions(square+10, 0.3);
